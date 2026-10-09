@@ -1,0 +1,2649 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Science Horizon – منصة المجتمع والنقاش العلمي ونظام الإدارة</title>
+  <meta name="description" content="منصة المجتمع والنقاش العلمي التفاعلية لقناة ساينس هورايزون مع نظام إدارة الصلاحيات والأعضاء والمحتوى المرئي." />
+
+  <!-- Google Fonts: Cairo (Arabic) & Plus Jakarta Sans (English) & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              850: '#0f172a',
+              900: '#0b1120',
+              950: '#030712',
+            },
+            cyan: {
+              450: '#00d4ff',
+            }
+          },
+          fontFamily: {
+            sans: ['Cairo', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            en: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --font-arabic: 'Cairo', system-ui, sans-serif;
+      --font-english: 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+    html[dir="rtl"] body {
+      font-family: var(--font-arabic);
+    }
+    html[dir="ltr"] body {
+      font-family: var(--font-english);
+    }
+    .cosmic-grid {
+      background-image: 
+        radial-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+        radial-gradient(rgba(37, 99, 235, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px, 64px 64px;
+      background-position: 0 0, 16px 16px;
+    }
+    .glass-panel {
+      background: rgba(11, 17, 32, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(30, 41, 59, 0.8);
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+    }
+    /* Hide scrollbars */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .badge-glow {
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.35);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 min-h-screen flex flex-col">
+
+  <!-- ================= TOAST NOTIFICATION CONTAINER ================= -->
+  <div id="toastContainer" class="fixed top-20 start-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none transition-all"></div>
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="#hero" class="flex items-center gap-3 group focus:outline-none shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+          <i data-lucide="atom" class="w-6 h-6"></i>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-cyan-400 transition-colors" data-i18n="brandName">
+            ساينس هورايزون
+          </span>
+          <span class="text-[10px] tracking-wider uppercase text-cyan-400 font-mono hidden sm:inline" data-i18n="brandSub">
+            SCIENCE HORIZON COMMUNITY
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
+        <a href="#hero" class="text-slate-300 hover:text-cyan-400 transition-colors" data-i18n="navHome">الرئيسية</a>
+        <a href="#forum" class="text-slate-300 hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <span data-i18n="navForum">ساحة النقاش</span>
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+        </a>
+        <a href="#videos" class="text-slate-300 hover:text-cyan-400 transition-colors" data-i18n="navVideos">الفيديوهات</a>
+        <a href="#fact" class="text-slate-300 hover:text-cyan-400 transition-colors" data-i18n="navFact">حقيقة اليوم</a>
+        <a href="#quiz" class="text-slate-300 hover:text-cyan-400 transition-colors" data-i18n="navQuiz">اختبر معلوماتك</a>
+      </nav>
+
+      <!-- User Profile / Auth / Admin Dashboard / Language -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        
+        <!-- Admin Dashboard Button (Only visible for Admin/Developer) -->
+        <button id="adminNavBtn" onclick="openAdminModal()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl border border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-300 hover:text-white text-xs font-bold transition-all badge-glow min-h-[40px]">
+          <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
+          <span data-i18n="navAdminBtn">لوحة الإدارة</span>
+        </button>
+
+        <!-- User Profile Slot (Dynamic via JS) -->
+        <div id="userNavSlot" class="flex items-center gap-2">
+          <!-- Populated by JS: Login Button or User Avatar Badge + Logout -->
+        </div>
+
+        <!-- Language Switcher Button -->
+        <button id="langToggleBtn" onclick="toggleLanguage()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-xs font-bold text-slate-200 transition-all hover:text-cyan-300 shadow-sm min-h-[40px]" title="تبديل اللغة / Switch Language">
+          <i data-lucide="globe" class="w-4 h-4 text-cyan-400"></i>
+          <span id="langBtnText" class="font-mono text-xs">EN</span>
+        </button>
+
+        <!-- YouTube Channel Button -->
+        <a href="https://youtube.com/@ScienceHorizon" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-500 rounded-xl shadow-md shadow-red-600/30 transition-all hover:scale-105 min-h-[40px]">
+          <i data-lucide="youtube" class="w-4 h-4"></i>
+          <span class="hidden xl:inline" data-i18n="btnSubscribe">قناة اليوتيوب</span>
+        </a>
+
+        <!-- Mobile Menu Toggle -->
+        <button onclick="toggleMobileMenu()" class="lg:hidden flex items-center justify-center p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors min-w-[40px] min-h-[40px]">
+          <i data-lucide="menu" id="menuIcon" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobileMenu" class="hidden lg:hidden border-b border-slate-800 bg-slate-950/98 px-4 pt-3 pb-6 space-y-2">
+      <div id="mobileUserBanner" class="p-3 mb-2 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+        <!-- Rendered by JS -->
+      </div>
+      <a href="#hero" onclick="closeMobileMenu()" class="block py-2.5 px-3 rounded-lg text-slate-200 hover:bg-slate-900 font-medium" data-i18n="navHome">الرئيسية</a>
+      <a href="#forum" onclick="closeMobileMenu()" class="block py-2.5 px-3 rounded-lg text-cyan-400 hover:bg-slate-900 font-bold" data-i18n="navForum">ساحة النقاش العلمي</a>
+      <a href="#videos" onclick="closeMobileMenu()" class="block py-2.5 px-3 rounded-lg text-slate-200 hover:bg-slate-900 font-medium" data-i18n="navVideos">الفيديوهات</a>
+      <a href="#fact" onclick="closeMobileMenu()" class="block py-2.5 px-3 rounded-lg text-slate-200 hover:bg-slate-900 font-medium" data-i18n="navFact">حقيقة اليوم</a>
+      <a href="#quiz" onclick="closeMobileMenu()" class="block py-2.5 px-3 rounded-lg text-slate-200 hover:bg-slate-900 font-medium" data-i18n="navQuiz">اختبر معلوماتك</a>
+      
+      <div id="mobileAdminLinkContainer" class="hidden">
+        <button onclick="closeMobileMenu(); openAdminModal();" class="w-full text-start py-2.5 px-3 rounded-lg text-cyan-300 bg-cyan-950/40 border border-cyan-500/30 font-bold flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
+          <span data-i18n="navAdminBtn">لوحة الإدارة والمشرفين</span>
+        </button>
+      </div>
+
+      <div class="pt-2 border-t border-slate-800">
+        <a href="https://youtube.com/@ScienceHorizon" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-red-600 text-white font-bold text-xs shadow-md">
+          <i data-lucide="youtube" class="w-4 h-4"></i>
+          <span data-i18n="btnSubscribe">اشترك في القناة</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section id="hero" class="relative pt-12 pb-16 md:pt-20 md:pb-24 px-4 overflow-hidden border-b border-slate-900 cosmic-grid">
+    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-gradient-to-tr from-cyan-600/15 via-blue-600/10 to-transparent blur-3xl -z-10 pointer-events-none"></div>
+
+    <div class="max-w-4xl mx-auto text-center space-y-6">
+      <!-- Role status badge banner -->
+      <div id="heroRoleBadge" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-950/40 text-cyan-300 text-xs font-mono uppercase tracking-widest">
+        <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400"></i>
+        <span data-i18n="heroBadge">مجتمع النقاش والبحث العلمي التفاعلي</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight" data-i18n="heroTitle">
+        اكتشف العلم وراء كل شيء
+      </h1>
+
+      <p class="text-base sm:text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed" data-i18n="heroSub">
+        المنصة العلمية التفاعلية المرافقة لقناتنا على يوتيوب. شارك في النقاشات الفلسفية والطبية والبيولوجية، واطرح تساؤلاتك العلمية لتناقشها مع مجتمع من الباحثين والمفكرين.
+      </p>
+
+      <!-- CTAs -->
+      <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+        <a href="#forum" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm shadow-lg shadow-cyan-500/25 transition-all hover:scale-105 min-h-[48px]">
+          <i data-lucide="message-square" class="w-5 h-5"></i>
+          <span data-i18n="heroJoinForum">انضم لساحة النقاش العلمي</span>
+        </a>
+
+        <a href="https://youtube.com/@ScienceHorizon" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-red-500/40 bg-red-950/30 hover:bg-red-900/50 text-white font-bold text-sm transition-all min-h-[48px]">
+          <i data-lucide="youtube" class="w-5 h-5 text-red-500"></i>
+          <span data-i18n="btnSubscribe">قناة اليوتيوب</span>
+        </a>
+
+        <a href="#quiz" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-slate-800 bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-bold text-sm transition-colors min-h-[48px]">
+          <i data-lucide="brain-circuit" class="w-4 h-4 text-cyan-400"></i>
+          <span data-i18n="navQuiz">الاختبار العلمي</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-24 w-full">
+
+    <!-- ================= 1. FORUM / COMMUNITY HUB ================= -->
+    <section id="forum" class="space-y-8 scroll-mt-20">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-6">
+        <div>
+          <div class="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-2">
+            <i data-lucide="messages-square" class="w-4 h-4"></i>
+            <span data-i18n="forumKicker">ساحة النقاش العلمي التفاعلي</span>
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight" data-i18n="forumTitle">
+            مجتمع الأطروحات والتساؤلات العلمية
+          </h2>
+          <p class="text-sm sm:text-base text-slate-400 mt-2 max-w-2xl" data-i18n="forumDesc">
+            اطرح تساؤلك العلمي، ناقش الفرضيات الحديثة، وشارك آراءك بالأدلة التجريبية في 4 محاور معرفية كبرى.
+          </p>
+        </div>
+
+        <!-- Add Post Trigger Button -->
+        <button onclick="handleNewPostButtonClick()" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-xs sm:text-sm shadow-md shadow-cyan-500/20 transition-all hover:scale-102 min-h-[44px]">
+          <i data-lucide="plus-circle" class="w-4 h-4 text-slate-950"></i>
+          <span data-i18n="btnNewPost">طرح تساؤل / منشور جديد</span>
+        </button>
+      </div>
+
+      <!-- Categories & Filters Tabs -->
+      <div class="space-y-4">
+        <!-- 4 Distinct Domains -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <!-- 1. Biology -->
+          <button onclick="setCategoryFilter('biology')" id="catCard-biology" class="category-card p-4 rounded-2xl glass-card border border-slate-800 text-start hover:border-emerald-500/50 transition-all duration-200 group">
+            <div class="flex items-center justify-between mb-2">
+              <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                <i data-lucide="dna" class="w-5 h-5"></i>
+              </div>
+              <span class="text-xs font-mono text-slate-400 count-badge" id="count-biology">0</span>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors" data-i18n="catBiology">العلوم البيولوجية</h3>
+            <p class="text-[11px] text-slate-400 mt-1 line-clamp-2" data-i18n="catBiologyDesc">علم الوراثة، التطور، الخلية، والتنوع الحيوي</p>
+          </button>
+
+          <!-- 2. Medicine & Health -->
+          <button onclick="setCategoryFilter('medicine')" id="catCard-medicine" class="category-card p-4 rounded-2xl glass-card border border-slate-800 text-start hover:border-cyan-500/50 transition-all duration-200 group">
+            <div class="flex items-center justify-between mb-2">
+              <div class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/20">
+                <i data-lucide="activity" class="w-5 h-5"></i>
+              </div>
+              <span class="text-xs font-mono text-slate-400 count-badge" id="count-medicine">0</span>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors" data-i18n="catMedicine">الطب والعلوم الصحية</h3>
+            <p class="text-[11px] text-slate-400 mt-1 line-clamp-2" data-i18n="catMedicineDesc">الفيزيولوجيا، المناعة، الأدوية، والأبحاث الطبية</p>
+          </button>
+
+          <!-- 3. Religion & Philosophy -->
+          <button onclick="setCategoryFilter('philosophy')" id="catCard-philosophy" class="category-card p-4 rounded-2xl glass-card border border-slate-800 text-start hover:border-purple-500/50 transition-all duration-200 group">
+            <div class="flex items-center justify-between mb-2">
+              <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center border border-purple-500/20">
+                <i data-lucide="compass" class="w-5 h-5"></i>
+              </div>
+              <span class="text-xs font-mono text-slate-400 count-badge" id="count-philosophy">0</span>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-purple-400 transition-colors" data-i18n="catPhilosophy">الجانب الديني والفلسفي</h3>
+            <p class="text-[11px] text-slate-400 mt-1 line-clamp-2" data-i18n="catPhilosophyDesc">فلسفة العلم، الوعي، الضبط الدقيق، والميتافيزيقا</p>
+          </button>
+
+          <!-- 4. History of Science -->
+          <button onclick="setCategoryFilter('history')" id="catCard-history" class="category-card p-4 rounded-2xl glass-card border border-slate-800 text-start hover:border-amber-500/50 transition-all duration-200 group">
+            <div class="flex items-center justify-between mb-2">
+              <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center border border-amber-500/20">
+                <i data-lucide="scroll" class="w-5 h-5"></i>
+              </div>
+              <span class="text-xs font-mono text-slate-400 count-badge" id="count-history">0</span>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-amber-400 transition-colors" data-i18n="catHistory">تاريخ العلوم</h3>
+            <p class="text-[11px] text-slate-400 mt-1 line-clamp-2" data-i18n="catHistoryDesc">مسيرة الاكتشاف، رواد المعرفة، والثورات العلمية</p>
+          </button>
+        </div>
+
+        <!-- Filter Bar & Search Input -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
+          <!-- Filter Tabs -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+            <button onclick="setCategoryFilter('all')" id="tab-all" class="filter-tab px-4 py-2 rounded-xl font-bold transition-colors whitespace-nowrap bg-cyan-500 text-slate-950">
+              <span data-i18n="filterAll">كافة الأقسام</span> (<span id="count-all">0</span>)
+            </button>
+            <button onclick="setCategoryFilter('biology')" id="tab-biology" class="filter-tab px-4 py-2 rounded-xl font-medium transition-colors whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white">
+              <span data-i18n="catBiology">العلوم البيولوجية</span>
+            </button>
+            <button onclick="setCategoryFilter('medicine')" id="tab-medicine" class="filter-tab px-4 py-2 rounded-xl font-medium transition-colors whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white">
+              <span data-i18n="catMedicine">الطب والصحة</span>
+            </button>
+            <button onclick="setCategoryFilter('philosophy')" id="tab-philosophy" class="filter-tab px-4 py-2 rounded-xl font-medium transition-colors whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white">
+              <span data-i18n="catPhilosophy">الدين والفلسفة</span>
+            </button>
+            <button onclick="setCategoryFilter('history')" id="tab-history" class="filter-tab px-4 py-2 rounded-xl font-medium transition-colors whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white">
+              <span data-i18n="catHistory">تاريخ العلوم</span>
+            </button>
+          </div>
+
+          <!-- Search Forum Bar -->
+          <div class="relative w-full sm:w-72">
+            <div class="absolute inset-y-0 start-0 ps-3 flex items-center pointer-events-none text-slate-500">
+              <i data-lucide="search" class="w-4 h-4"></i>
+            </div>
+            <input type="text" id="forumSearch" oninput="handleForumSearch(this.value)" placeholder="ابحث في النقاشات..." class="w-full ps-9 pe-3 py-2 text-xs rounded-xl border border-slate-800 bg-slate-900/90 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all">
+          </div>
+        </div>
+      </div>
+
+      <!-- Discussions Feed Container -->
+      <div id="postsContainer" class="space-y-4">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+    </section>
+
+    <!-- ================= 2. VIDEOS SECTION ================= -->
+    <section id="videos" class="space-y-6 scroll-mt-20">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+        <div>
+          <span class="text-xs font-mono font-semibold uppercase tracking-wider text-cyan-400" data-i18n="videosKicker">مكتبة المرئيات العلمية</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white mt-1" data-i18n="videosTitle">أحدث الفيديوهات الوثائقية</h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="adminAddVideoQuickBtn" onclick="openAdminModal('videosTab')" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl border border-cyan-500/40 bg-cyan-950/40 text-cyan-300 hover:bg-cyan-900/50 transition-colors">
+            <i data-lucide="plus" class="w-3.5 h-3.5 inline"></i>
+            <span data-i18n="btnAddVideoShort">إضافة فيديو جديد</span>
+          </button>
+          <a href="https://youtube.com/@ScienceHorizon" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-red-400 hover:text-red-300 flex items-center gap-1.5 transition-colors">
+            <span data-i18n="btnSubscribe">زيارة القناة</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Video Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="videoGrid">
+        <!-- Rendered dynamically from localStorage & defaults -->
+      </div>
+    </section>
+
+    <!-- ================= 3. DAILY FACT CARD ================= -->
+    <section id="fact" class="scroll-mt-20">
+      <div class="rounded-3xl border border-cyan-500/30 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-cyan-950/20 p-6 sm:p-8 backdrop-blur-sm relative overflow-hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+          <div class="flex items-center gap-2 text-xs font-mono font-bold text-cyan-400">
+            <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400"></i>
+            <span class="uppercase tracking-wider" data-i18n="dailyFactKicker">حقيقة علمية موثقة لليوم</span>
+            <span class="text-slate-600">·</span>
+            <span id="factIndexText" class="text-slate-400">#1</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="copyFactText()" class="p-2 rounded-xl border border-slate-800 bg-slate-950 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors min-h-[40px] min-w-[40px] flex items-center justify-center" title="نسخ الحقيقة">
+              <i data-lucide="copy" id="factCopyIcon" class="w-4 h-4"></i>
+            </button>
+            <button onclick="nextFact()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-950 hover:bg-slate-800 text-xs font-bold text-cyan-400 transition-colors min-h-[40px]">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+              <span data-i18n="btnNextFact">حقيقة تالية</span>
+            </button>
+          </div>
+        </div>
+
+        <blockquote id="factQuote" class="text-lg sm:text-2xl font-bold text-white leading-relaxed mb-4">
+          "ملعقة صغيرة واحدة من مادة نجم نيوتروني تزن حوالي 6 مليارات طن على كوكب الأرض."
+        </blockquote>
+
+        <p id="factContext" class="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6 max-w-3xl">
+          عندما تنهار النجوم الضخمة إلى نجوم نيوترونية، تضغط الجاذبية البروتونات والإلكترونات لتصبح نيوترونات بكثافة نووية هائلة تفوق الخيال (حوالي 4×10¹⁷ كجم/م³).
+        </p>
+
+        <div class="pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 font-mono">
+          <div class="flex items-center gap-2">
+            <span class="text-slate-400" data-i18n="factSourceLabel">المصدر الأكاديمي:</span>
+            <span id="factSource" class="text-cyan-300 font-semibold">NASA Goddard Space Flight Center / Astrophysical Journal</span>
+          </div>
+          <span class="text-slate-500 uppercase">VERIFIED SCIENTIFIC ARCHIVE</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4. INTERACTIVE QUIZ ================= -->
+    <section id="quiz" class="space-y-6 scroll-mt-20">
+      <div class="border-b border-slate-800 pb-4">
+        <div class="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-1">
+          <i data-lucide="brain-circuit" class="w-4 h-4"></i>
+          <span data-i18n="quizKicker">تحدي المعرفة التجريبية</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-black text-white" data-i18n="quizTitle">اختبر معلوماتك العلمية</h2>
+      </div>
+
+      <!-- Quiz Interactive Card -->
+      <div id="quizContainer" class="rounded-3xl glass-card border border-slate-800 p-6 sm:p-8 space-y-6">
+        <!-- Live Progress & Score -->
+        <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+          <span class="flex items-center gap-1.5">
+            <span class="text-cyan-400 font-bold" data-i18n="quizQuestionLabel">السؤال</span>
+            <span id="quizNumber">1</span>
+            <span>/</span>
+            <span id="quizTotal">4</span>
+          </span>
+          <span class="text-emerald-400 font-bold">
+            <span data-i18n="quizScoreLabel">النقاط:</span> <span id="quizScore">0</span>
+          </span>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+          <div id="quizProgressBar" class="h-full bg-cyan-400 transition-all duration-300 w-1/4"></div>
+        </div>
+
+        <!-- Question Prompt -->
+        <div class="space-y-2">
+          <span id="quizCategoryBadge" class="text-[11px] font-mono text-cyan-400 uppercase font-bold tracking-wider">العلوم البيولوجية</span>
+          <h3 id="quizQuestionText" class="text-base sm:text-xl font-bold text-white leading-snug">
+            أي عُضَيّة خلوية مسؤولة عن توليد ثلاثي فوسفات الأدينوسين (ATP) عبر الفسفرة التأكسدية؟
+          </h3>
+        </div>
+
+        <!-- Options Buttons -->
+        <div id="quizOptionsContainer" class="space-y-3">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Feedback & Explanation Box -->
+        <div id="quizFeedbackBox" class="hidden p-4 rounded-2xl border text-xs sm:text-sm space-y-2 transition-all">
+          <div id="quizFeedbackTitle" class="font-bold flex items-center gap-2"></div>
+          <p id="quizFeedbackExplanation" class="text-slate-300 leading-relaxed"></p>
+        </div>
+
+        <!-- Next / Restart Button -->
+        <div class="flex justify-end pt-2">
+          <button id="quizNextBtn" onclick="handleQuizNext()" class="hidden px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs sm:text-sm transition-all flex items-center gap-2">
+            <span id="quizNextText">السؤال التالي</span>
+            <i data-lucide="arrow-left" id="quizNextIcon" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= AUTH MODAL (SOCIAL LOGIN & AUTH GUARD) ================= -->
+  <div id="authModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md p-4 overflow-y-auto flex items-center justify-center">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-5 shadow-2xl relative">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 text-cyan-400 flex items-center justify-center border border-cyan-500/30 shadow-sm">
+            <i data-lucide="shield-alert" id="authModalIcon" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 id="authModalTitle" class="text-base sm:text-lg font-bold text-white" data-i18n="authModalTitle">تسجيل الدخول للمجتمع العلمي</h3>
+            <p id="authModalSub" class="text-xs text-slate-400" data-i18n="authModalSub">للمشاركة في النقاشات وطرح التساؤلات وحفظ النتائج</p>
+          </div>
+        </div>
+        <button onclick="closeAuthModal()" class="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors" title="إغلاق / Close">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Auth Guard Notice Banner (Shown dynamically when guest clicks an interactive button) -->
+      <div id="authGuardBanner" class="p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/40 text-amber-200 text-xs flex items-start gap-2.5 shadow-sm">
+        <i data-lucide="lock" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+        <div class="space-y-0.5">
+          <p id="authGuardBannerText" class="font-bold leading-snug">يتطلب هذا الإجراء تسجيل الدخول أولاً</p>
+          <p class="text-[11px] text-amber-300/80 leading-relaxed" data-i18n="authGuardSub">اختر حسابك المفضل أدناه للدخول الفوري وتفعيل الصلاحيات بنقرة واحدة.</p>
+        </div>
+      </div>
+
+      <!-- Primary: Official Social Login Buttons -->
+      <div class="space-y-3 pt-1">
+        <!-- 1. Google Button -->
+        <button onclick="handleSocialLogin('google')" class="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-3 transition-all hover:scale-[1.01] active:scale-[0.99] border border-slate-200 group">
+          <!-- Official Multi-colored Google G Icon -->
+          <svg class="w-5 h-5 group-hover:scale-105 transition-transform" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span data-i18n="loginWithGoogle">المتابعة باستخدام Google</span>
+        </button>
+
+        <!-- 2. Facebook Button -->
+        <button onclick="handleSocialLogin('facebook')" class="w-full py-3.5 px-4 rounded-2xl bg-[#1877F2] hover:bg-[#166fe5] active:bg-[#125ec2] text-white font-bold text-xs sm:text-sm shadow-md shadow-[#1877F2]/25 flex items-center justify-center gap-3 transition-all hover:scale-[1.01] active:scale-[0.99] group">
+          <!-- Official Facebook SVG Icon -->
+          <svg class="w-5 h-5 fill-white group-hover:scale-105 transition-transform" viewBox="0 0 24 24">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          <span data-i18n="loginWithFacebook">المتابعة باستخدام Facebook</span>
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="relative flex items-center py-1">
+        <div class="flex-grow border-t border-slate-800"></div>
+        <span class="flex-shrink mx-3 text-[10px] font-mono text-slate-500 uppercase tracking-wider" data-i18n="orDivider">أو خيارات الإشراف والتطوير</span>
+        <div class="flex-grow border-t border-slate-800"></div>
+      </div>
+
+      <!-- Quick Developer & Admin Access Section -->
+      <div class="space-y-2.5">
+        <button onclick="handleQuickAdminLogin()" class="w-full py-3 px-4 rounded-2xl border border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-300 hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition-all badge-glow group">
+          <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform"></i>
+          <span data-i18n="quickAdminDevLogin">دخول تجريبي سريع كـ مشرف ومطور (Admin Dev Access)</span>
+        </button>
+
+        <div class="text-center">
+          <button onclick="toggleEmailCredentialsBox()" id="toggleEmailFormBtn" class="text-[11px] text-slate-400 hover:text-cyan-300 font-mono inline-flex items-center gap-1 transition-colors underline decoration-slate-700">
+            <i data-lucide="key" class="w-3 h-3"></i>
+            <span id="toggleEmailFormText" data-i18n="toggleCredentialsText">تسجيل يدوي بالبريد وكلمة المرور للمشرف أو عضو جديد</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Collapsible Email/Password Form (For manual admin or regular member signup) -->
+      <div id="emailCredentialsContainer" class="hidden pt-3 border-t border-slate-800 space-y-4">
+        <!-- Auth Tabs: Login vs Register -->
+        <div class="flex p-1 bg-slate-950 rounded-xl border border-slate-800 text-xs font-bold">
+          <button onclick="switchAuthTab('login')" id="authTabLogin" class="flex-1 py-1.5 rounded-lg bg-cyan-500 text-slate-950 transition-all" data-i18n="tabLogin">تسجيل الدخول</button>
+          <button onclick="switchAuthTab('register')" id="authTabRegister" class="flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all" data-i18n="tabRegister">إنشاء حساب جديد</button>
+        </div>
+
+        <!-- Quick Demo Credentials Callout -->
+        <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-[11px] text-slate-400 space-y-1">
+          <p class="font-bold flex items-center gap-1 text-cyan-300">
+            <i data-lucide="info" class="w-3.5 h-3.5 text-cyan-400"></i>
+            <span data-i18n="demoAdminTitle">حساب المشرف الافتراضي:</span>
+          </p>
+          <p class="font-mono text-slate-300 text-[10px]">البريد: <span class="text-cyan-300 font-bold">admin@science.com</span> | كلمة المرور: <span class="text-cyan-300 font-bold">admin123</span></p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1" data-i18n="formEmail">البريد الإلكتروني</label>
+            <input type="email" id="loginEmail" required value="admin@science.com" placeholder="admin@science.com" class="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs focus:outline-none focus:ring-1 focus:ring-cyan-400 font-mono">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1" data-i18n="formPassword">كلمة المرور</label>
+            <input type="password" id="loginPassword" required value="admin123" placeholder="••••••••" class="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs focus:outline-none focus:ring-1 focus:ring-cyan-400 font-mono">
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs shadow-md transition-all" data-i18n="btnLoginAction">
+            دخول
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="space-y-3 hidden">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1" data-i18n="formFullName">الاسم الكامل / المعرّف الأكاديمي</label>
+            <input type="text" id="regName" required placeholder="د. أحمد / سارة المنصوري" class="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs focus:outline-none focus:ring-1 focus:ring-cyan-400">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1" data-i18n="formEmail">البريد الإلكتروني</label>
+            <input type="email" id="regEmail" required placeholder="user@example.com" class="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs focus:outline-none focus:ring-1 focus:ring-cyan-400 font-mono">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1" data-i18n="formPassword">كلمة المرور</label>
+            <input type="password" id="regPassword" required placeholder="••••••••" class="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs focus:outline-none focus:ring-1 focus:ring-cyan-400 font-mono">
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs shadow-md transition-all" data-i18n="btnRegisterAction">
+            إنشاء حساب عضو جديد
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= ADMIN DASHBOARD MODAL ================= -->
+  <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md p-4 overflow-y-auto flex items-center justify-center">
+    <div class="w-full max-w-4xl bg-slate-900 border border-cyan-500/30 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] flex flex-col">
+      
+      <!-- Admin Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4 shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 flex items-center justify-center font-bold shadow-md">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-slate-950"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-black text-white flex items-center gap-2">
+              <span data-i18n="adminPanelTitle">لوحة تحكم المشرف والمطور</span>
+              <span class="px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 text-[10px] font-mono border border-cyan-500/40">ROOT ACCESS</span>
+            </h3>
+            <p class="text-xs text-slate-400" data-i18n="adminPanelSub">إدارة كاملة للفيديوهات، الأعضاء، وحظر الحسابات، وتحديث الحقائق والكويز</p>
+          </div>
+        </div>
+        <button onclick="closeAdminModal()" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Dashboard Navigation Tabs -->
+      <div class="flex border-b border-slate-800 text-xs font-bold gap-2 overflow-x-auto no-scrollbar shrink-0">
+        <button onclick="switchAdminTab('videos')" id="adminTab-videos" class="admin-tab-btn py-2.5 px-4 border-b-2 border-cyan-400 text-cyan-400 transition-colors whitespace-nowrap flex items-center gap-1.5">
+          <i data-lucide="video" class="w-4 h-4"></i>
+          <span data-i18n="tabAdminVideos">إدارة الفيديوهات</span>
+        </button>
+        <button onclick="switchAdminTab('users')" id="adminTab-users" class="admin-tab-btn py-2.5 px-4 border-b-2 border-transparent text-slate-400 hover:text-white transition-colors whitespace-nowrap flex items-center gap-1.5">
+          <i data-lucide="users" class="w-4 h-4"></i>
+          <span data-i18n="tabAdminUsers">إدارة الأعضاء والحظر</span>
+        </button>
+        <button onclick="switchAdminTab('content')" id="adminTab-content" class="admin-tab-btn py-2.5 px-4 border-b-2 border-transparent text-slate-400 hover:text-white transition-colors whitespace-nowrap flex items-center gap-1.5">
+          <i data-lucide="sliders" class="w-4 h-4"></i>
+          <span data-i18n="tabAdminContent">تحديث الحقيقة العلمية والكويز</span>
+        </button>
+      </div>
+
+      <!-- Tab 1: Video Management -->
+      <div id="adminPanelVideos" class="space-y-6 overflow-y-auto flex-1 pr-1">
+        <!-- Add Video Form -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-4">
+          <h4 class="text-sm font-bold text-white flex items-center gap-2">
+            <i data-lucide="plus-circle" class="w-4 h-4 text-cyan-400"></i>
+            <span data-i18n="formAddVideoTitle">إضافة فيديو جديد للموقع</span>
+          </h4>
+          <form id="addVideoForm" onsubmit="handleAddVideoSubmit(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block text-slate-300 mb-1 font-bold" data-i18n="lblVideoTitle">عنوان الفيديو *</label>
+              <input type="text" id="newVidTitle" required placeholder="مثال: سر المادة المظلمة في المجرات" class="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-white focus:outline-none focus:ring-1 focus:ring-cyan-400">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1 font-bold" data-i18n="lblVideoYouTubeId">معرف أو رابط يوتيوب (YouTube ID/URL) *</label>
+              <input type="text" id="newVidYouTube" required placeholder="dQw4w9WgXcQ أو الرابط الكامل" class="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-white focus:outline-none focus:ring-1 focus:ring-cyan-400 font-mono">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1 font-bold" data-i18n="lblVideoCategory">التصنيف العلمي *</label>
+              <input type="text" id="newVidCategory" required placeholder="فيزياء الفلك / البيولوجيا" class="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-white focus:outline-none focus:ring-1 focus:ring-cyan-400">
+            </div>
+            <div>
+              <label class="block text-slate-300 mb-1 font-bold" data-i18n="lblVideoDuration">المدة الزمنية</label>
+              <input type="text" id="newVidDuration" placeholder="15:30 دقيقة" class="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-white focus:outline-none focus:ring-1 focus:ring-cyan-400">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-slate-300 mb-1 font-bold" data-i18n="lblVideoDesc">الوصف العلمي المختصر</label>
+              <textarea id="newVidDesc" rows="2" placeholder="شرح مبسط لموضوع الفيديو والأوراق العلمية التي يعتمد عليها..." class="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-white focus:outline-none focus:ring-1 focus:ring-cyan-400"></textarea>
+            </div>
+            <div class="sm:col-span-2 flex justify-end">
+              <button type="submit" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-all" data-i18n="btnPublishVideo">
+                نشر الفيديو على المنصة
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Current Videos List with Delete option -->
+        <div class="space-y-3">
+          <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400" data-i18n="lblCurrentVideos">الفيديوهات الحالية على الموقع</h4>
+          <div id="adminVideosList" class="space-y-2">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: User Moderation & Ban Management -->
+      <div id="adminPanelUsers" class="space-y-4 overflow-y-auto flex-1 pr-1 hidden">
+        <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800">
+          <h4 class="text-sm font-bold text-white mb-2" data-i18n="lblMembersOverview">إدارة سجل الأعضاء وحالة الحسابات</h4>
+          <p class="text-xs text-slate-400 mb-4" data-i18n="lblMembersDesc">يمكنك حظر أي حساب مخالف لمنعه من النشر أو التعليق، أو رفع الحظر عنه فوراً.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-start text-xs text-slate-300">
+              <thead class="bg-slate-900 text-slate-400 uppercase font-mono border-b border-slate-800">
+                <tr>
+                  <th class="p-2.5 text-start" data-i18n="thName">الاسم</th>
+                  <th class="p-2.5 text-start" data-i18n="thEmail">البريد</th>
+                  <th class="p-2.5 text-start" data-i18n="thRole">الرتبة</th>
+                  <th class="p-2.5 text-start" data-i18n="thStatus">الحالة</th>
+                  <th class="p-2.5 text-end" data-i18n="thAction">الإجراء</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersTableBody" class="divide-y divide-slate-800/80">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Daily Fact & Content Management -->
+      <div id="adminPanelContent" class="space-y-6 overflow-y-auto flex-1 pr-1 hidden">
+        <form id="adminUpdateFactForm" onsubmit="handleAdminUpdateFact(event)" class="p-4 sm:p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3 text-xs">
+          <h4 class="text-sm font-bold text-white flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400"></i>
+            <span data-i18n="lblEditFactTitle">تعديل أو إضافة حقيقة علمية جديدة</span>
+          </h4>
+          <div>
+            <label class="block text-slate-300 mb-1 font-bold" data-i18n="lblFactText">نص الحقيقة العلمية *</label>
+            <input type="text" id="adminFactQuote" required class="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-white focus:outline-none focus:ring-1 focus:ring-cyan-400">
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-bold" data-i18n="lblFactContext">الشرح والسياق الفيزيائي/الحيوي *</label>
+            <textarea id="adminFactContext" rows="3" required class="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-white focus:outline-none focus:ring-1 focus:ring-cyan-400"></textarea>
+          </div>
+          <div>
+            <label class="block text-slate-300 mb-1 font-bold" data-i18n="lblFactSource">المصدر الأكاديمي أو الوكالة *</label>
+            <input type="text" id="adminFactSource" required class="w-full px-3 py-2 rounded-xl border border-slate-800 bg-slate-900 text-white focus:outline-none focus:ring-1 focus:ring-cyan-400">
+          </div>
+          <div class="flex justify-end pt-2">
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-all" data-i18n="btnSaveFact">
+              تحديث الحقيقة فوراً
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= NEW POST MODAL ================= -->
+  <div id="newPostModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm p-4 overflow-y-auto flex items-center justify-center">
+    <div class="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/20">
+            <i data-lucide="edit-3" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white" data-i18n="modalNewPostTitle">طرح تساؤل أو منشور علمي جديد</h3>
+            <p class="text-xs text-slate-400" data-i18n="modalNewPostSub">سيتم نشره مباشرة في ساحة المجتمع العلمي وحفظه محلياً</p>
+          </div>
+        </div>
+        <button onclick="closeNewPostModal()" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form id="newPostForm" onsubmit="handleCreatePost(event)" class="space-y-4">
+        <!-- Author Name (auto-filled if logged in) -->
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1.5" data-i18n="formAuthorLabel">اسم الكاتب أو المعرّف *</label>
+          <input type="text" id="postAuthor" required placeholder="مثال: د. أحمد الباحث / الباحثة سارة" class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-slate-600">
+        </div>
+
+        <!-- Category Select (4 Specific Domains) -->
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1.5" data-i18n="formCategoryLabel">المجال العلمي والتخصص *</label>
+          <select id="postCategory" required class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
+            <option value="biology" data-i18n="catBiology">العلوم البيولوجية (Biology)</option>
+            <option value="medicine" data-i18n="catMedicine">جانب الطب والصحة (Medicine & Health Sciences)</option>
+            <option value="philosophy" data-i18n="catPhilosophy">الجانب الديني والفلسفي (Religion & Philosophy)</option>
+            <option value="history" data-i18n="catHistory">التاريخ وتاريخ العلوم (History of Science)</option>
+          </select>
+        </div>
+
+        <!-- Post Title -->
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1.5" data-i18n="formTitleLabel">عنوان التساؤل أو الأطروحة *</label>
+          <input type="text" id="postTitle" required placeholder="عنوان مركز ومحدد يلخص الفكرة العلمية" class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-slate-600">
+        </div>
+
+        <!-- Content -->
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1.5" data-i18n="formContentLabel">المحتوى والتفاصيل العلمية *</label>
+          <textarea id="postContent" required rows="5" placeholder="اشرح تساؤلك بالتفصيل، اذكر الأدلة أو الملاحظات التي تود مناقشتها..." class="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-950 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-slate-600 leading-relaxed"></textarea>
+        </div>
+
+        <!-- Tags / Keywords -->
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1.5" data-i18n="formTagsLabel">الكلمات المفتاحية (اختياري، مفصولة بفواصل)</label>
+          <input type="text" id="postTags" placeholder="مثال: DNA, مناعة, كوانتم, ابن الهيثم" class="w-full px-4 py-2 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-slate-600">
+        </div>
+
+        <!-- Form Submit & Cancel -->
+        <div class="pt-3 border-t border-slate-800 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeNewPostModal()" class="px-4 py-2.5 rounded-xl border border-slate-800 hover:bg-slate-800 text-xs text-slate-300 font-bold" data-i18n="btnCancel">إلغاء</button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all" data-i18n="btnPublish">نشر في المجتمع</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-slate-800/80 bg-slate-950 pt-12 pb-12 text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        
+        <!-- Brand Info -->
+        <div class="md:col-span-2 space-y-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center">
+              <i data-lucide="atom" class="w-5 h-5"></i>
+            </div>
+            <span class="text-lg font-bold text-white tracking-tight" data-i18n="brandName">ساينس هورايزون</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md" data-i18n="footerMission">
+            منصة مجتمع ونقاش علمي تابعة لقناة يوتيوب متخصصة في نشر المعرفة التجريبية، وتبسيط الفيزياء والأحياء والطب والفلسفة بروح البحث الأكاديمي الرصين.
+          </p>
+          <div class="flex items-center gap-3 pt-2">
+            <a href="https://youtube.com/@ScienceHorizon" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-red-500 flex items-center justify-center transition-colors">
+              <i data-lucide="youtube" class="w-4 h-4"></i>
+            </a>
+            <a href="https://twitter.com/ScienceHorizon" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-400 flex items-center justify-center transition-colors">
+              <i data-lucide="twitter" class="w-4 h-4"></i>
+            </a>
+            <a href="https://github.com/ScienceHorizon" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition-colors">
+              <i data-lucide="github" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-200 mb-3" data-i18n="footerNavTitle">أقسام المنصة</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#hero" class="hover:text-cyan-400 transition-colors" data-i18n="navHome">الرئيسية</a></li>
+            <li><a href="#forum" class="hover:text-cyan-400 transition-colors" data-i18n="navForum">ساحة النقاش العلمي</a></li>
+            <li><a href="#videos" class="hover:text-cyan-400 transition-colors" data-i18n="navVideos">مكتبة الفيديوهات</a></li>
+            <li><a href="#quiz" class="hover:text-cyan-400 transition-colors" data-i18n="navQuiz">الاختبار العلمي</a></li>
+          </ul>
+        </div>
+
+        <!-- Community Rules -->
+        <div>
+          <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-200 mb-3" data-i18n="footerRulesTitle">ميثاق المجتمع</h4>
+          <p class="text-xs text-slate-400 leading-relaxed" data-i18n="footerRulesDesc">
+            جميع الأطروحات تخضع لمبادئ النزاهة العلمية والاحترام المتبادل، مع إعطاء الأولوية دائماً للأدلة التجريبية والمنطق الرصين.
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 font-mono">
+        <p data-i18n="footerCopyright">© 2026 Science Horizon Media. جميع الحقوق محفوظة.</p>
+        <p>ROLE-BASED COMMUNITY &amp; SCIENTIFIC MANAGEMENT SYSTEM</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    // ---------- BILINGUAL DICTIONARY ----------
+    let currentLang = localStorage.getItem('sh_lang') || 'ar';
+
+    const TRANSLATIONS = {
+      ar: {
+        brandName: 'ساينس هورايزون',
+        brandSub: 'مجتمع ونقاش علمي',
+        navHome: 'الرئيسية',
+        navForum: 'ساحة النقاش',
+        navVideos: 'الفيديوهات',
+        navFact: 'حقيقة اليوم',
+        navQuiz: 'اختبر معلوماتك',
+        btnSubscribe: 'قناة اليوتيوب',
+        navAdminBtn: 'لوحة الإدارة',
+        heroBadge: 'مجتمع النقاش والبحث العلمي التفاعلي',
+        heroTitle: 'اكتشف العلم وراء كل شيء',
+        heroSub: 'المنصة العلمية التفاعلية المرافقة لقناتنا على يوتيوب. شارك في النقاشات الفلسفية والطبية والبيولوجية، واطرح تساؤلاتك العلمية لتناقشها مع مجتمع من الباحثين والمفكرين.',
+        heroJoinForum: 'انضم لساحة النقاش العلمي',
+        forumKicker: 'ساحة النقاش العلمي التفاعلي',
+        forumTitle: 'مجتمع الأطروحات والتساؤلات العلمية',
+        forumDesc: 'اطرح تساؤلك العلمي، ناقش الفرضيات الحديثة، وشارك آراءك بالأدلة التجريبية في 4 محاور معرفية كبرى.',
+        btnNewPost: 'طرح تساؤل / منشور جديد',
+        catBiology: 'العلوم البيولوجية',
+        catBiologyDesc: 'علم الوراثة، التطور، الخلية، والتنوع الحيوي',
+        catMedicine: 'الطب والعلوم الصحية',
+        catMedicineDesc: 'الفيزيولوجيا، المناعة، الأدوية، والأبحاث الطبية',
+        catPhilosophy: 'الجانب الديني والفلسفي',
+        catPhilosophyDesc: 'فلسفة العلم، الوعي، الضبط الدقيق، والميتافيزيقا',
+        catHistory: 'تاريخ العلوم',
+        catHistoryDesc: 'مسيرة الاكتشاف، رواد المعرفة، والثورات العلمية',
+        filterAll: 'كافة الأقسام',
+        videosKicker: 'مكتبة المرئيات العلمية',
+        videosTitle: 'أحدث الفيديوهات الوثائقية',
+        badgeVerified: 'موثق بالدراسات',
+        dailyFactKicker: 'حقيقة علمية موثقة لليوم',
+        btnNextFact: 'حقيقة تالية',
+        factSourceLabel: 'المصدر الأكاديمي:',
+        quizKicker: 'تحدي المعرفة التجريبية',
+        quizTitle: 'اختبر معلوماتك العلمية',
+        quizQuestionLabel: 'السؤال',
+        quizScoreLabel: 'النقاط:',
+        modalNewPostTitle: 'طرح تساؤل أو منشور علمي جديد',
+        modalNewPostSub: 'سيتم نشره مباشرة في ساحة المجتمع العلمي وحفظه محلياً',
+        formAuthorLabel: 'اسم الكاتب أو المعرّف *',
+        formCategoryLabel: 'المجال العلمي والتخصص *',
+        formTitleLabel: 'عنوان التساؤل أو الأطروحة *',
+        formContentLabel: 'المحتوى والتفاصيل العلمية *',
+        formTagsLabel: 'الكلمات المفتاحية (اختياري، مفصولة بفواصل)',
+        btnCancel: 'إلغاء',
+        btnPublish: 'نشر في المجتمع',
+        footerMission: 'منصة مجتمع ونقاش علمي تابعة لقناة يوتيوب متخصصة في نشر المعرفة التجريبية، وتبسيط الفيزياء والأحياء والطب والفلسفة بروح البحث الأكاديمي الرصين.',
+        footerNavTitle: 'أقسام المنصة',
+        footerRulesTitle: 'ميثاق المجتمع',
+        footerRulesDesc: 'جميع الأطروحات تخضع لمبادئ النزاهة العلمية والاحترام المتبادل، مع إعطاء الأولوية دائماً للأدلة التجريبية والمنطق الرصين.',
+        footerCopyright: '© 2026 Science Horizon Media. جميع الحقوق محفوظة.',
+        btnReply: 'إضافة رد / مناقشة',
+        repliesTitle: 'الردود والمناقشات',
+        replyPlaceholder: 'اكتب ردك أو دليلك العلمي هنا...',
+        authorPlaceholder: 'اسمك...',
+        btnSendReply: 'إرسال الرد',
+        noRepliesYet: 'لا توجد ردود حتى الآن. كن أول من يناقش هذا المنشور!',
+        emptyPosts: 'لا توجد منشورات في هذا التخصص حالياً. بادر بطرح أول تساؤل علمي!',
+        authModalTitle: 'تسجيل الدخول للمجتمع العلمي',
+        authModalSub: 'للمشاركة في النقاشات وطرح التساؤلات وحفظ النتائج',
+        tabLogin: 'تسجيل الدخول',
+        tabRegister: 'إنشاء حساب جديد',
+        loginWithGoogle: 'المتابعة باستخدام Google',
+        loginWithFacebook: 'المتابعة باستخدام Facebook',
+        quickAdminDevLogin: 'دخول تجريبي سريع كـ مشرف ومطور (Admin Dev Access)',
+        orDivider: 'أو خيارات الإشراف والتطوير',
+        toggleCredentialsText: 'تسجيل يدوي بالبريد وكلمة المرور للمشرف أو عضو جديد',
+        guestModeBadge: 'وضع المعاينة مفعّل للزوار · اضغط لتسجيل الدخول والتفاعل',
+        loggedInBadge: 'عضوية نشطة في المجتمع · كافة الصلاحيات التفاعلية متاحة',
+        previewModeTitle: 'وضع المعاينة (زائر)',
+        previewModeSub: 'سجل الدخول للمشاركة في النقاش',
+        quizGuestNotice: 'وضع المعاينة: اضغط على أي خيار لتسجيل الدخول وخوض التحدي وحفظ نتيجتك',
+        saveQuizScoreBtn: 'حفظ النتيجة في ملفك الشخصي',
+        quizScoreSaved: 'تم حفظ نتيجتك بنجاح في ملفك الأكاديمي!',
+        authGuardNoticePost: '🔒 يتطلب طرح تساؤل أو أطروحة علمية جديدة تسجيل الدخول أولاً',
+        authGuardNoticeLike: '🔒 يتطلب الإعجاب بالأطروحات العلمية تسجيل الدخول أولاً',
+        authGuardNoticeReply: '🔒 يتطلب الرد والمشاركة في النقاش العلمي تسجيل الدخول أولاً',
+        authGuardNoticeQuiz: '🔒 يتطلب خوض الاختبار العلمي التفاعلي وحفظ النتائج تسجيل الدخول أولاً',
+        authGuardNoticeDefault: '🔒 هذه الميزة التفاعلية تتطلب تسجيل الدخول بحسابك أولاً',
+        authGuardSub: 'اختر حسابك المفضل أدناه للدخول الفوري وتفعيل الصلاحيات بنقرة واحدة.',
+        demoAdminTitle: 'حساب المشرف / المطور الافتراضي:',
+        formEmail: 'البريد الإلكتروني',
+        formPassword: 'كلمة المرور',
+        formFullName: 'الاسم الكامل / المعرّف الأكاديمي',
+        btnLoginAction: 'دخول',
+        btnRegisterAction: 'إنشاء حساب عضو جديد',
+        adminPanelTitle: 'لوحة تحكم المشرف والمطور',
+        adminPanelSub: 'إدارة كاملة للفيديوهات، الأعضاء، وحظر الحسابات، وتحديث الحقائق والكويز',
+        tabAdminVideos: 'إدارة الفيديوهات',
+        tabAdminUsers: 'إدارة الأعضاء والحظر',
+        tabAdminContent: 'تحديث الحقيقة العلمية والكويز',
+        formAddVideoTitle: 'إضافة فيديو جديد للموقع',
+        lblVideoTitle: 'عنوان الفيديو *',
+        lblVideoYouTubeId: 'معرف أو رابط يوتيوب (YouTube ID/URL) *',
+        lblVideoCategory: 'التصنيف العلمي *',
+        lblVideoDuration: 'المدة الزمنية',
+        lblVideoDesc: 'الوصف العلمي المختصر',
+        btnPublishVideo: 'نشر الفيديو على المنصة',
+        lblCurrentVideos: 'الفيديوهات الحالية على الموقع',
+        lblMembersOverview: 'إدارة سجل الأعضاء وحالة الحسابات',
+        lblMembersDesc: 'يمكنك حظر أي حساب مخالف لمنعه من النشر أو التعليق، أو رفع الحظر عنه فوراً.',
+        thName: 'الاسم',
+        thEmail: 'البريد',
+        thRole: 'الرتبة',
+        thStatus: 'الحالة',
+        thAction: 'الإجراء',
+        lblEditFactTitle: 'تعديل أو إضافة حقيقة علمية جديدة',
+        lblFactText: 'نص الحقيقة العلمية *',
+        lblFactContext: 'الشرح والسياق الفيزيائي/الحيوي *',
+        lblFactSource: 'المصدر الأكاديمي أو الوكالة *',
+        btnSaveFact: 'تحديث الحقيقة فوراً',
+        btnAddVideoShort: 'إضافة فيديو جديد',
+        badgeAdmin: 'مطور المنصة',
+        badgeMember: 'عضو علمي',
+        statusActive: 'نشط',
+        statusBanned: 'محظور',
+        btnBan: 'حظر',
+        btnUnban: 'إلغاء الحظر',
+        btnLogin: 'تسجيل الدخول',
+        btnLogout: 'تسجيل الخروج',
+        deletePostBtn: 'حذف المنشور (إداري)',
+      },
+      en: {
+        brandName: 'Science Horizon',
+        brandSub: 'SCIENCE COMMUNITY',
+        navHome: 'Home',
+        navForum: 'Community Forum',
+        navVideos: 'Videos',
+        navFact: 'Daily Fact',
+        navQuiz: 'Science Quiz',
+        btnSubscribe: 'YouTube Channel',
+        navAdminBtn: 'Admin Dashboard',
+        heroBadge: 'Interactive Scientific Discussion & Research Hub',
+        heroTitle: 'Discover the Science Behind Everything',
+        heroSub: 'The official interactive community companion for our YouTube channel. Engage in deep debates on biology, medicine, philosophy, and history of science.',
+        heroJoinForum: 'Join Scientific Discussions',
+        forumKicker: 'Interactive Discussion Arena',
+        forumTitle: 'Scientific Community Theses & Inquiries',
+        forumDesc: 'Ask your scientific questions, critique modern hypotheses, and share evidence-based perspectives across four key domains.',
+        btnNewPost: 'Post New Topic / Question',
+        catBiology: 'Biological Sciences',
+        catBiologyDesc: 'Genetics, evolution, cellular biology, and biodiversity',
+        catMedicine: 'Medicine & Health Sciences',
+        catMedicineDesc: 'Physiology, immunology, pharmacology, and medical research',
+        catPhilosophy: 'Religion & Philosophy',
+        catPhilosophyDesc: 'Philosophy of science, consciousness, fine-tuning, and metaphysics',
+        catHistory: 'History of Science',
+        catHistoryDesc: 'Timeline of discovery, pioneer scholars, and scientific revolutions',
+        filterAll: 'All Categories',
+        videosKicker: 'Scientific Video Library',
+        videosTitle: 'Latest Documentary Episodes',
+        badgeVerified: 'Peer-Referenced',
+        dailyFactKicker: 'Verified Daily Science Fact',
+        btnNextFact: 'Next Fact',
+        factSourceLabel: 'Academic Source:',
+        quizKicker: 'Empirical Knowledge Challenge',
+        quizTitle: 'Test Your Scientific Knowledge',
+        quizQuestionLabel: 'Question',
+        quizScoreLabel: 'Score:',
+        modalNewPostTitle: 'Create New Science Post or Inquiry',
+        modalNewPostSub: 'Will be published immediately in the community hub and saved locally',
+        formAuthorLabel: 'Author Name or Handle *',
+        formCategoryLabel: 'Scientific Category *',
+        formTitleLabel: 'Inquiry / Topic Title *',
+        formContentLabel: 'Scientific Content & Details *',
+        formTagsLabel: 'Keywords (Optional, comma-separated)',
+        btnCancel: 'Cancel',
+        btnPublish: 'Publish to Community',
+        footerMission: 'A scientific discussion platform and companion to our YouTube channel dedicated to empirical evidence, astrophysics, biology, medicine, and philosophy.',
+        footerNavTitle: 'Navigation',
+        footerRulesTitle: 'Community Charter',
+        footerRulesDesc: 'All discussions adhere to scientific integrity and mutual respect, with strict priority given to empirical evidence and sound logic.',
+        footerCopyright: '© 2026 Science Horizon Media. All rights reserved.',
+        btnReply: 'Reply / Discuss',
+        repliesTitle: 'Replies & Discussion',
+        replyPlaceholder: 'Write your scientific reply or counter-evidence here...',
+        authorPlaceholder: 'Your name...',
+        btnSendReply: 'Post Reply',
+        noRepliesYet: 'No replies yet. Be the first to start this scientific discussion!',
+        emptyPosts: 'No posts in this category yet. Be the first to ask a scientific question!',
+        authModalTitle: 'Sign In to the Science Community',
+        authModalSub: 'Join discussions, post inquiries & save quiz achievements',
+        tabLogin: 'Log In',
+        tabRegister: 'Create Account',
+        loginWithGoogle: 'Continue with Google',
+        loginWithFacebook: 'Continue with Facebook',
+        quickAdminDevLogin: 'Quick Dev & Admin Access',
+        orDivider: 'Or Developer & Admin Options',
+        toggleCredentialsText: 'Manual sign in with email & password (Admin or New Member)',
+        guestModeBadge: 'Preview Mode Active · Click to Sign In & Interact',
+        loggedInBadge: 'Active Community Member · All interactive privileges enabled',
+        previewModeTitle: 'Preview Mode (Guest)',
+        previewModeSub: 'Sign in to participate',
+        quizGuestNotice: 'Preview Mode: Click any option to sign in and take the interactive challenge',
+        saveQuizScoreBtn: 'Save Score to Profile',
+        quizScoreSaved: 'Quiz score saved successfully to your profile!',
+        authGuardNoticePost: '🔒 Posting a new scientific inquiry requires signing in first',
+        authGuardNoticeLike: '🔒 Upvoting scientific topics requires signing in first',
+        authGuardNoticeReply: '🔒 Replying to community discussions requires signing in first',
+        authGuardNoticeQuiz: '🔒 Taking the interactive quiz and saving results requires signing in first',
+        authGuardNoticeDefault: '🔒 This interactive feature requires signing in with your account first',
+        authGuardSub: 'Choose your preferred account below for instant 1-click access.',
+        demoAdminTitle: 'Default Admin / Developer Credentials:',
+        formEmail: 'Email Address',
+        formPassword: 'Password',
+        formFullName: 'Full Name / Academic Title',
+        btnLoginAction: 'Sign In',
+        btnRegisterAction: 'Register Member Account',
+        adminPanelTitle: 'Admin & Developer Dashboard',
+        adminPanelSub: 'Full control over videos, member bans, daily facts, and quiz management',
+        tabAdminVideos: 'Video Management',
+        tabAdminUsers: 'Members & Ban Control',
+        tabAdminContent: 'Facts & Quiz Editor',
+        formAddVideoTitle: 'Add New Video to Website',
+        lblVideoTitle: 'Video Title *',
+        lblVideoYouTubeId: 'YouTube ID / URL *',
+        lblVideoCategory: 'Category *',
+        lblVideoDuration: 'Duration',
+        lblVideoDesc: 'Brief Summary',
+        btnPublishVideo: 'Publish Video Live',
+        lblCurrentVideos: 'Current Videos on Platform',
+        lblMembersOverview: 'Registered Members Directory & Status',
+        lblMembersDesc: 'Ban policy violations to restrict posting/commenting or unban at any time.',
+        thName: 'Name',
+        thEmail: 'Email',
+        thRole: 'Role',
+        thStatus: 'Status',
+        thAction: 'Action',
+        lblEditFactTitle: 'Edit or Add Daily Science Fact',
+        lblFactText: 'Scientific Fact *',
+        lblFactContext: 'Context & Scientific Explanation *',
+        lblFactSource: 'Academic Source / Agency *',
+        btnSaveFact: 'Update Fact Now',
+        btnAddVideoShort: 'Add New Video',
+        badgeAdmin: 'Platform Developer',
+        badgeMember: 'Member',
+        statusActive: 'Active',
+        statusBanned: 'Banned',
+        btnBan: 'Ban',
+        btnUnban: 'Unban',
+        btnLogin: 'Log In',
+        btnLogout: 'Log Out',
+        deletePostBtn: 'Delete Post (Admin)',
+      }
+    };
+
+    // ---------- TOAST SYSTEM ----------
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      let borderCol = 'border-cyan-500/50 bg-slate-900/95 text-cyan-200';
+      if (type === 'error') borderCol = 'border-rose-500/50 bg-slate-900/95 text-rose-200';
+      if (type === 'success') borderCol = 'border-emerald-500/50 bg-slate-900/95 text-emerald-200';
+
+      toast.className = `px-4 py-2.5 rounded-xl border ${borderCol} shadow-xl text-xs font-bold backdrop-blur-md flex items-center gap-2 transition-all transform duration-200`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 250);
+      }, 3500);
+    }
+
+    // ---------- 1. USER AUTH & RBAC SYSTEM ----------
+    const DEFAULT_ADMIN = {
+      id: 'user-admin-1',
+      name: 'د. عاصم المطور / Dr. Asem',
+      email: 'admin@science.com',
+      password: 'admin123',
+      role: 'admin',
+      isBanned: false,
+      joinedAt: '2026-01-01'
+    };
+
+    function loadUsers() {
+      const stored = localStorage.getItem('sh_users');
+      if (stored) {
+        try {
+          const list = JSON.parse(stored);
+          if (!list.some(u => u.email === DEFAULT_ADMIN.email)) {
+            list.unshift(DEFAULT_ADMIN);
+            localStorage.setItem('sh_users', JSON.stringify(list));
+          }
+          return list;
+        } catch(e) {}
+      }
+      const initial = [DEFAULT_ADMIN];
+      localStorage.setItem('sh_users', JSON.stringify(initial));
+      return initial;
+    }
+
+    function loadCurrentUser() {
+      const stored = localStorage.getItem('sh_current_user');
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) {}
+      }
+      return null;
+    }
+
+    let usersList = loadUsers();
+    let currentUser = loadCurrentUser();
+
+    function saveUsers() {
+      localStorage.setItem('sh_users', JSON.stringify(usersList));
+    }
+
+    function setCurrentUser(user) {
+      currentUser = user;
+      if (user) {
+        localStorage.setItem('sh_current_user', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('sh_current_user');
+      }
+      renderAuthUI();
+      renderForumPosts();
+    }
+
+    let pendingAuthAction = null;
+
+    function requireAuth(reason, actionCallback) {
+      if (!currentUser) {
+        pendingAuthAction = actionCallback;
+        openAuthModal('social', reason);
+        return false;
+      }
+      if (currentUser.isBanned) {
+        showToast(currentLang === 'ar' ? 'هذا الحساب محظور من التفاعل والمشاركة!' : 'This account is banned from interactions!', 'error');
+        return false;
+      }
+      if (typeof actionCallback === 'function') {
+        actionCallback();
+      }
+      return true;
+    }
+
+    function renderAuthUI() {
+      const userSlot = document.getElementById('userNavSlot');
+      const adminBtn = document.getElementById('adminNavBtn');
+      const mobileAdminLink = document.getElementById('mobileAdminLinkContainer');
+      const mobileUserBanner = document.getElementById('mobileUserBanner');
+      const heroRoleBadge = document.getElementById('heroRoleBadge');
+      const isRtl = currentLang === 'ar';
+
+      if (currentUser) {
+        const isAdmin = currentUser.role === 'admin';
+
+        // Show / Hide admin dashboard button
+        if (isAdmin) {
+          adminBtn.classList.remove('hidden');
+          adminBtn.classList.add('flex');
+          mobileAdminLink.classList.remove('hidden');
+        } else {
+          adminBtn.classList.add('hidden');
+          adminBtn.classList.remove('flex');
+          mobileAdminLink.classList.add('hidden');
+        }
+
+        // Mini provider icon badge on avatar corner
+        let providerBadgeIcon = '';
+        if (currentUser.provider === 'google') {
+          providerBadgeIcon = `<span class="absolute -bottom-1 -end-1 w-4 h-4 rounded-full bg-white flex items-center justify-center shadow border border-slate-200"><svg class="w-2.5 h-2.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg></span>`;
+        } else if (currentUser.provider === 'facebook') {
+          providerBadgeIcon = `<span class="absolute -bottom-1 -end-1 w-4 h-4 rounded-full bg-[#1877F2] flex items-center justify-center shadow"><svg class="w-2.5 h-2.5 fill-white" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></span>`;
+        } else if (isAdmin) {
+          providerBadgeIcon = `<span class="absolute -bottom-1 -end-1 w-4 h-4 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center font-bold text-[8px]"><i data-lucide="shield" class="w-2.5 h-2.5"></i></span>`;
+        }
+
+        const avatarImg = currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=0284c7&color=fff&bold=true`;
+
+        const badgeHtml = isAdmin 
+          ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 badge-glow">${TRANSLATIONS[currentLang].badgeAdmin}</span>`
+          : `<span class="px-2 py-0.5 rounded-full text-[10px] font-mono text-emerald-300 bg-emerald-950/50 border border-emerald-500/30 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>${TRANSLATIONS[currentLang].badgeMember}</span>`;
+
+        userSlot.innerHTML = `
+          <div class="flex items-center gap-2 sm:gap-2.5">
+            <div class="relative shrink-0">
+              <img src="${avatarImg}" alt="${currentUser.name}" class="w-9 h-9 rounded-xl object-cover border border-cyan-500/40 bg-slate-800 shadow-sm" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=0284c7&color=fff';">
+              ${providerBadgeIcon}
+            </div>
+            <div class="hidden sm:flex flex-col text-start">
+              <span class="text-xs font-bold text-white max-w-[120px] truncate leading-tight">${currentUser.name}</span>
+              <div class="mt-0.5">${badgeHtml}</div>
+            </div>
+            <button onclick="handleLogout()" class="p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-slate-800 bg-slate-900/90 hover:bg-rose-950/40 hover:border-rose-500/40 text-slate-400 hover:text-rose-400 text-xs font-bold transition-all min-h-[40px] flex items-center gap-1.5" title="${TRANSLATIONS[currentLang].btnLogout}">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+              <span class="hidden md:inline text-xs">${TRANSLATIONS[currentLang].btnLogout}</span>
+            </button>
+          </div>
+        `;
+
+        mobileUserBanner.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="relative shrink-0">
+              <img src="${avatarImg}" alt="${currentUser.name}" class="w-10 h-10 rounded-xl object-cover border border-cyan-500/40 bg-slate-800" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=0284c7&color=fff';">
+              ${providerBadgeIcon}
+            </div>
+            <div class="flex flex-col text-start">
+              <span class="text-xs font-bold text-white">${currentUser.name}</span>
+              <span class="text-[10px] text-slate-400 font-mono">${currentUser.email}</span>
+              <div class="mt-1">${badgeHtml}</div>
+            </div>
+          </div>
+          <button onclick="handleLogout()" class="px-2.5 py-1.5 rounded-lg bg-rose-950/40 border border-rose-500/40 text-rose-300 hover:text-white text-xs font-bold flex items-center gap-1">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>${TRANSLATIONS[currentLang].btnLogout}</span>
+          </button>
+        `;
+
+        // Update Hero Badge for logged in member
+        if (heroRoleBadge) {
+          heroRoleBadge.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-950/50 text-cyan-300 text-xs font-mono tracking-wide shadow-sm";
+          heroRoleBadge.onclick = null;
+          heroRoleBadge.innerHTML = `
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400"></i>
+            <span>${TRANSLATIONS[currentLang].loggedInBadge} (${currentUser.name})</span>
+          `;
+        }
+
+      } else {
+        // Guest user (Preview Mode)
+        adminBtn.classList.add('hidden');
+        adminBtn.classList.remove('flex');
+        mobileAdminLink.classList.add('hidden');
+
+        userSlot.innerHTML = `
+          <button onclick="openAuthModal('social')" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-cyan-500/50 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500 hover:to-blue-600 text-cyan-300 hover:text-slate-950 text-xs font-bold transition-all shadow-md shadow-cyan-500/10 min-h-[40px] group">
+            <i data-lucide="log-in" class="w-4 h-4 text-cyan-400 group-hover:text-slate-950 transition-colors"></i>
+            <span>${TRANSLATIONS[currentLang].btnLogin}</span>
+          </button>
+        `;
+
+        mobileUserBanner.innerHTML = `
+          <div class="flex items-center gap-2.5 text-start">
+            <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-xs font-bold text-slate-200">${TRANSLATIONS[currentLang].previewModeTitle}</span>
+              <span class="text-[10px] text-slate-400">${TRANSLATIONS[currentLang].previewModeSub}</span>
+            </div>
+          </div>
+          <button onclick="closeMobileMenu(); openAuthModal('social');" class="px-3 py-1.5 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs shadow-md">
+            ${TRANSLATIONS[currentLang].btnLogin}
+          </button>
+        `;
+
+        // Update Hero Badge for Guest Preview Mode
+        if (heroRoleBadge) {
+          heroRoleBadge.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-500/40 bg-amber-950/40 text-amber-300 text-xs font-mono tracking-wide cursor-pointer hover:bg-amber-900/50 transition-all shadow-sm";
+          heroRoleBadge.onclick = () => openAuthModal('social');
+          heroRoleBadge.innerHTML = `
+            <i data-lucide="eye" class="w-4 h-4 text-amber-400 animate-pulse"></i>
+            <span>${TRANSLATIONS[currentLang].guestModeBadge}</span>
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5 ltr:rotate-180"></i>
+          `;
+        }
+      }
+
+      lucide.createIcons();
+    }
+
+    // Modal controls for Auth & Social Login
+    function openAuthModal(tab = 'social', reason = null) {
+      const banner = document.getElementById('authGuardBanner');
+      const bannerText = document.getElementById('authGuardBannerText');
+
+      if (banner && bannerText) {
+        if (reason === 'post') {
+          bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticePost;
+          banner.classList.remove('hidden');
+        } else if (reason === 'like') {
+          bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeLike;
+          banner.classList.remove('hidden');
+        } else if (reason === 'reply') {
+          bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeReply;
+          banner.classList.remove('hidden');
+        } else if (reason === 'quiz' || reason === 'quiz_save') {
+          bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeQuiz;
+          banner.classList.remove('hidden');
+        } else {
+          bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeDefault;
+          banner.classList.remove('hidden');
+        }
+      }
+
+      // Hide email credentials box by default
+      const emailBox = document.getElementById('emailCredentialsContainer');
+      if (emailBox) emailBox.classList.add('hidden');
+
+      document.getElementById('authModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    function toggleEmailCredentialsBox() {
+      const emailBox = document.getElementById('emailCredentialsContainer');
+      if (emailBox) {
+        emailBox.classList.toggle('hidden');
+        lucide.createIcons();
+      }
+    }
+
+    function switchAuthTab(tab) {
+      const loginForm = document.getElementById('loginForm');
+      const regForm = document.getElementById('registerForm');
+      const tabLogin = document.getElementById('authTabLogin');
+      const tabReg = document.getElementById('authTabRegister');
+
+      if (tab === 'login') {
+        loginForm.classList.remove('hidden');
+        regForm.classList.add('hidden');
+        tabLogin.className = 'flex-1 py-1.5 rounded-lg bg-cyan-500 text-slate-950 font-bold transition-all';
+        tabReg.className = 'flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all';
+      } else {
+        loginForm.classList.add('hidden');
+        regForm.classList.remove('hidden');
+        tabReg.className = 'flex-1 py-1.5 rounded-lg bg-cyan-500 text-slate-950 font-bold transition-all';
+        tabLogin.className = 'flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all';
+      }
+    }
+
+    // 1-Click Social Sign-In (Google & Facebook)
+    function handleSocialLogin(provider) {
+      let user;
+      const isAr = currentLang === 'ar';
+
+      if (provider === 'google') {
+        user = {
+          id: 'user-google-' + Date.now(),
+          name: isAr ? 'د. سليم العمري' : 'Dr. Salim Al-Omari',
+          email: 'salim.research@gmail.com',
+          role: 'member',
+          provider: 'google',
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=80',
+          isBanned: false,
+          joinedAt: new Date().toISOString().split('T')[0]
+        };
+      } else if (provider === 'facebook') {
+        user = {
+          id: 'user-fb-' + Date.now(),
+          name: isAr ? 'م. نور الهدى' : 'Eng. Nour Al-Hoda',
+          email: 'nour.elhoda@facebook.com',
+          role: 'member',
+          provider: 'facebook',
+          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=160&q=80',
+          isBanned: false,
+          joinedAt: new Date().toISOString().split('T')[0]
+        };
+      }
+
+      // Add to users list if not exists
+      if (!usersList.some(u => u.email === user.email)) {
+        usersList.push(user);
+        saveUsers();
+      }
+
+      setCurrentUser(user);
+      closeAuthModal();
+
+      showToast(
+        isAr 
+          ? `مرحباً بك! تم تسجيل الدخول بنجاح بحساب ${provider === 'google' ? 'Google' : 'Facebook'}.` 
+          : `Welcome! Successfully signed in via ${provider === 'google' ? 'Google' : 'Facebook'}.`, 
+        'success'
+      );
+
+      // Execute pending action if user clicked an interactive button before logging in
+      if (typeof pendingAuthAction === 'function') {
+        const action = pendingAuthAction;
+        pendingAuthAction = null;
+        setTimeout(() => action(), 150);
+      }
+    }
+
+    // Quick Admin / Developer 1-Click Sign-In
+    function handleQuickAdminLogin() {
+      const adminUser = usersList.find(u => u.email === DEFAULT_ADMIN.email) || DEFAULT_ADMIN;
+      adminUser.avatar = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80';
+      adminUser.provider = 'admin';
+
+      setCurrentUser(adminUser);
+      closeAuthModal();
+
+      showToast(
+        currentLang === 'ar' 
+          ? 'تم تسجيل الدخول بصلاحية المشرف والمطور (Admin)!' 
+          : 'Signed in with Developer & Admin privileges!', 
+        'success'
+      );
+
+      if (typeof pendingAuthAction === 'function') {
+        const action = pendingAuthAction;
+        pendingAuthAction = null;
+        setTimeout(() => action(), 150);
+      }
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPassword').value.trim();
+
+      const user = usersList.find(u => u.email.toLowerCase() === email.toLowerCase());
+      if (!user || user.password !== pass) {
+        showToast(currentLang === 'ar' ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة!' : 'Invalid email or password!', 'error');
+        return;
+      }
+
+      if (user.isBanned) {
+        showToast(currentLang === 'ar' ? 'هذا الحساب محظور من قِبل إدارة المنصة!' : 'This account has been banned by administrators!', 'error');
+        return;
+      }
+
+      setCurrentUser(user);
+      closeAuthModal();
+      document.getElementById('loginForm').reset();
+      showToast(currentLang === 'ar' ? `مرحباً بك، ${user.name}` : `Welcome back, ${user.name}`, 'success');
+
+      if (typeof pendingAuthAction === 'function') {
+        const action = pendingAuthAction;
+        pendingAuthAction = null;
+        setTimeout(() => action(), 150);
+      }
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const pass = document.getElementById('regPassword').value.trim();
+
+      if (!name || !email || !pass) return;
+
+      if (usersList.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+        showToast(currentLang === 'ar' ? 'هذا البريد مسجل بالفعل مسبقاً!' : 'Email already registered!', 'error');
+        return;
+      }
+
+      const newUser = {
+        id: 'user-' + Date.now(),
+        name: name,
+        email: email,
+        password: pass,
+        role: 'member',
+        provider: 'email',
+        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0284c7&color=fff&bold=true`,
+        isBanned: false,
+        joinedAt: new Date().toISOString().split('T')[0]
+      };
+
+      usersList.push(newUser);
+      saveUsers();
+      setCurrentUser(newUser);
+      closeAuthModal();
+      document.getElementById('registerForm').reset();
+      showToast(currentLang === 'ar' ? 'تم إنشاء الحساب بنجاح وتم تسجيل الدخول!' : 'Account registered and logged in successfully!', 'success');
+
+      if (typeof pendingAuthAction === 'function') {
+        const action = pendingAuthAction;
+        pendingAuthAction = null;
+        setTimeout(() => action(), 150);
+      }
+    }
+
+    function handleLogout() {
+      setCurrentUser(null);
+      showToast(currentLang === 'ar' ? 'تم تسجيل الخروج بنجاح.' : 'Logged out successfully.', 'info');
+    }
+
+    // ---------- 2. VIDEOS STATE & MANAGEMENT ----------
+    const DEFAULT_VIDEOS = [
+      {
+        id: 'vid-1',
+        youtubeId: 'dQw4w9WgXcQ',
+        category: 'فيزياء الفلك والكواكب',
+        title: 'مطر الألماس في نبتون: أعماق الوشاح الجليدي',
+        desc: 'كيف تؤدي الضغوط الشديدة إلى تفكيك الهيدروكربونات وترسيب بلورات الألماس الصلبة داخل أعماق الكوكب.',
+        duration: '14:28 دقيقة'
+      },
+      {
+        id: 'vid-2',
+        youtubeId: 'dQw4w9WgXcQ',
+        category: 'الجيوديسيا والأرض',
+        title: 'الهندسة التي لا تقبل الجدل: 5 براهين على كروية الأرض',
+        desc: 'من تجارب إراتوستينس وكسوف القمر إلى انخفاض الأفق والقياسات بالأقمار الصناعية الحديثة.',
+        duration: '18:50 دقيقة'
+      },
+      {
+        id: 'vid-3',
+        youtubeId: 'dQw4w9WgXcQ',
+        category: 'ميكانيكا الكم',
+        title: 'تجربة الشق المزدوج: المعنى الفيزيائي للرصد والقياس',
+        desc: 'فصل الأوهام الفلسفية عن الحقيقة الفيزيائية لفك الترابط الكمي (Decoherence) وانهيار الدالة الموجية.',
+        duration: '16:40 دقيقة'
+      }
+    ];
+
+    function loadVideos() {
+      const stored = localStorage.getItem('sh_videos');
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) {}
+      }
+      localStorage.setItem('sh_videos', JSON.stringify(DEFAULT_VIDEOS));
+      return DEFAULT_VIDEOS;
+    }
+
+    let siteVideos = loadVideos();
+
+    function saveVideos() {
+      localStorage.setItem('sh_videos', JSON.stringify(siteVideos));
+    }
+
+    function renderVideoGrid() {
+      const grid = document.getElementById('videoGrid');
+      const isAdmin = currentUser && currentUser.role === 'admin';
+
+      grid.innerHTML = siteVideos.map(vid => `
+        <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 hover:border-cyan-500/40 transition-all group flex flex-col relative">
+          <div class="relative aspect-video bg-black overflow-hidden">
+            <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/${vid.youtubeId}" title="${vid.title}" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="text-[11px] font-mono text-cyan-400 uppercase font-bold">${vid.category}</span>
+              <h3 class="text-base font-bold text-white group-hover:text-cyan-300 transition-colors">${vid.title}</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">${vid.desc}</p>
+            </div>
+            <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-mono mt-4">
+              <span>${vid.duration || '12:00'}</span>
+              <div class="flex items-center gap-2">
+                <span class="text-cyan-400 font-bold">${TRANSLATIONS[currentLang].badgeVerified}</span>
+                ${isAdmin ? `
+                  <button onclick="handleDeleteVideo('${vid.id}')" class="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-950/40" title="حذف الفيديو">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      renderAdminVideosList();
+      lucide.createIcons();
+    }
+
+    function extractYouTubeId(urlOrId) {
+      if (!urlOrId) return '';
+      const match = urlOrId.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+      return match ? match[1] : urlOrId.trim();
+    }
+
+    function handleAddVideoSubmit(e) {
+      e.preventDefault();
+      if (!currentUser || currentUser.role !== 'admin') return;
+
+      const title = document.getElementById('newVidTitle').value.trim();
+      const ytRaw = document.getElementById('newVidYouTube').value.trim();
+      const cat = document.getElementById('newVidCategory').value.trim();
+      const dur = document.getElementById('newVidDuration').value.trim() || '15:00';
+      const desc = document.getElementById('newVidDesc').value.trim();
+
+      const ytId = extractYouTubeId(ytRaw);
+
+      const newVid = {
+        id: 'vid-' + Date.now(),
+        youtubeId: ytId,
+        title: title,
+        category: cat,
+        duration: dur,
+        desc: desc
+      };
+
+      siteVideos.unshift(newVid);
+      saveVideos();
+      renderVideoGrid();
+      document.getElementById('addVideoForm').reset();
+      showToast(currentLang === 'ar' ? 'تمت إضافة الفيديو الجديد بنجاح!' : 'New video published successfully!', 'success');
+    }
+
+    function handleDeleteVideo(id) {
+      if (!currentUser || currentUser.role !== 'admin') return;
+      if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا الفيديو؟' : 'Are you sure you want to delete this video?')) return;
+
+      siteVideos = siteVideos.filter(v => v.id !== id);
+      saveVideos();
+      renderVideoGrid();
+      showToast(currentLang === 'ar' ? 'تم حذف الفيديو.' : 'Video deleted.', 'info');
+    }
+
+    function renderAdminVideosList() {
+      const container = document.getElementById('adminVideosList');
+      if (!container) return;
+
+      container.innerHTML = siteVideos.map(v => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+          <div class="flex items-center gap-2">
+            <i data-lucide="play-circle" class="w-4 h-4 text-cyan-400"></i>
+            <span class="font-bold text-white max-w-[280px] sm:max-w-md truncate">${v.title}</span>
+            <span class="text-[10px] text-slate-500 font-mono">(${v.youtubeId})</span>
+          </div>
+          <button onclick="handleDeleteVideo('${v.id}')" class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-400 hover:text-white text-[11px] font-bold">
+            حذف
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // ---------- 3. ADMIN MODAL & TAB CONTROL ----------
+    function openAdminModal(tab = 'videos') {
+      if (!currentUser || currentUser.role !== 'admin') {
+        showToast(currentLang === 'ar' ? 'غير مصرح لك بالوصول إلى لوحة الإدارة!' : 'Unauthorized access to admin panel!', 'error');
+        return;
+      }
+      document.getElementById('adminModal').classList.remove('hidden');
+      switchAdminTab(tab);
+      renderAdminUsersTable();
+    }
+    function closeAdminModal() {
+      document.getElementById('adminModal').classList.add('hidden');
+    }
+
+    function switchAdminTab(tab) {
+      const pVideos = document.getElementById('adminPanelVideos');
+      const pUsers = document.getElementById('adminPanelUsers');
+      const pContent = document.getElementById('adminPanelContent');
+
+      document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        btn.classList.remove('border-cyan-400', 'text-cyan-400');
+        btn.classList.add('border-transparent', 'text-slate-400');
+      });
+
+      pVideos.classList.add('hidden');
+      pUsers.classList.add('hidden');
+      pContent.classList.add('hidden');
+
+      if (tab === 'videos' || tab === 'videosTab') {
+        pVideos.classList.remove('hidden');
+        document.getElementById('adminTab-videos').classList.add('border-cyan-400', 'text-cyan-400');
+      } else if (tab === 'users') {
+        pUsers.classList.remove('hidden');
+        document.getElementById('adminTab-users').classList.add('border-cyan-400', 'text-cyan-400');
+        renderAdminUsersTable();
+      } else if (tab === 'content') {
+        pContent.classList.remove('hidden');
+        document.getElementById('adminTab-content').classList.add('border-cyan-400', 'text-cyan-400');
+        // Pre-fill current fact
+        const f = DAILY_FACTS[currentFactIndex];
+        document.getElementById('adminFactQuote').value = f.fact[currentLang] || f.fact.ar;
+        document.getElementById('adminFactContext').value = f.context[currentLang] || f.context.ar;
+        document.getElementById('adminFactSource').value = f.source;
+      }
+
+      lucide.createIcons();
+    }
+
+    function renderAdminUsersTable() {
+      const tbody = document.getElementById('adminUsersTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = usersList.map(u => {
+        const isRootAdmin = u.email === DEFAULT_ADMIN.email;
+        const statusBadge = u.isBanned 
+          ? `<span class="px-2 py-0.5 rounded text-[10px] bg-rose-500/20 text-rose-300 font-bold border border-rose-500/40">${TRANSLATIONS[currentLang].statusBanned}</span>`
+          : `<span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40">${TRANSLATIONS[currentLang].statusActive}</span>`;
+
+        const roleBadge = u.role === 'admin'
+          ? `<span class="text-cyan-400 font-mono font-bold">${TRANSLATIONS[currentLang].badgeAdmin}</span>`
+          : `<span class="text-slate-400 font-mono">${TRANSLATIONS[currentLang].badgeMember}</span>`;
+
+        let actionBtn = '';
+        if (!isRootAdmin) {
+          actionBtn = u.isBanned
+            ? `<button onclick="handleToggleBan('${u.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-400 hover:text-white font-bold text-[10px]">${TRANSLATIONS[currentLang].btnUnban}</button>`
+            : `<button onclick="handleToggleBan('${u.id}')" class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-500/40 text-rose-400 hover:text-white font-bold text-[10px]">${TRANSLATIONS[currentLang].btnBan}</button>`;
+        } else {
+          actionBtn = `<span class="text-[10px] text-slate-500 font-mono">Protected</span>`;
+        }
+
+        return `
+          <tr class="hover:bg-slate-900/40">
+            <td class="p-2.5 font-bold text-white">${u.name}</td>
+            <td class="p-2.5 font-mono text-slate-400">${u.email}</td>
+            <td class="p-2.5">${roleBadge}</td>
+            <td class="p-2.5">${statusBadge}</td>
+            <td class="p-2.5 text-end">${actionBtn}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function handleToggleBan(userId) {
+      if (!currentUser || currentUser.role !== 'admin') return;
+      const target = usersList.find(u => u.id === userId);
+      if (!target || target.email === DEFAULT_ADMIN.email) return;
+
+      target.isBanned = !target.isBanned;
+      saveUsers();
+      renderAdminUsersTable();
+
+      // If banned target is current session, logout
+      if (currentUser.id === userId && target.isBanned) {
+        handleLogout();
+      }
+
+      showToast(target.isBanned 
+        ? (currentLang === 'ar' ? `تم حظر ${target.name}` : `${target.name} has been banned.`)
+        : (currentLang === 'ar' ? `تم رفع الحظر عن ${target.name}` : `Unbanned ${target.name}.`),
+        'info'
+      );
+    }
+
+    function handleAdminUpdateFact(e) {
+      e.preventDefault();
+      if (!currentUser || currentUser.role !== 'admin') return;
+
+      const quote = document.getElementById('adminFactQuote').value.trim();
+      const context = document.getElementById('adminFactContext').value.trim();
+      const source = document.getElementById('adminFactSource').value.trim();
+
+      DAILY_FACTS[currentFactIndex] = {
+        fact: { ar: quote, en: quote },
+        context: { ar: context, en: context },
+        source: source
+      };
+
+      renderFact();
+      showToast(currentLang === 'ar' ? 'تم تحديث الحقيقة العلمية بنجاح!' : 'Scientific fact updated!', 'success');
+      closeAdminModal();
+    }
+
+    // ---------- 4. FORUM DATA & INTERACTIONS ----------
+    const DEFAULT_POSTS = [
+      {
+        id: 'post-bio-1',
+        category: 'biology',
+        author: { ar: 'د. يوسف المنصوري (باحث وراثة)', en: 'Dr. Youssef Al-Mansouri (Geneticist)' },
+        authorRole: 'member',
+        date: '2026-10-08',
+        upvotes: 28,
+        title: {
+          ar: 'هل يمكن لتقنية كريسبر (CRISPR 3.0) القضاء تماماً على الطفرات الجينية الموروثة؟',
+          en: 'Can CRISPR 3.0 completely eradicate hereditary genetic mutations?'
+        },
+        content: {
+          ar: 'شهدت تقنيات التحرير الجيني طفرة نوعية مع استخدام أنظمة Prime Editing و Base Editing التي تقلل احتمالية القطع المزدوج العشوائي (Double-strand breaks). السؤال للنقاش: هل نحن على مشارف حقبة تنتهي فيها أمراض مثل فقر الدم المنجلي والثلاسيميا نهائياً قبل الولادة؟ وما هي العوائق الإبيجينيتيكية (Epigenetics) التي قد تعترض ذلك؟',
+          en: 'Genetic editing technologies have leaped forward with Prime Editing and Base Editing, reducing unintended double-strand breaks. Discussion prompt: Are we near an era where disorders like sickle-cell anemia are eliminated prenatally, and what epigenetic barriers still stand in the way?'
+        },
+        tags: ['CRISPR', 'Genetics', 'Epigenetics'],
+        replies: [
+          {
+            author: { ar: 'مريم الكعبي (طالبة دراسات عليا)', en: 'Mariam Al-Kaabi (MSc Candidate)' },
+            date: '2026-10-08',
+            content: {
+              ar: 'التحدي الأكبر حالياً ليس دقة القطع الجيني فحسب، بل آلية التوصيل (Delivery mechanisms) إلى الأنسجة المستهدفة دون إثارة استجابة مناعية مضادة للنواقل الفيروسية.',
+              en: 'The biggest obstacle today is not just cutting precision, but delivery vectors reaching target tissues without triggering adverse immune responses.'
+            }
+          }
+        ]
+      },
+      {
+        id: 'post-med-1',
+        category: 'medicine',
+        author: { ar: 'د. سارة الهاشمي (استشارية مناعة)', en: 'Dr. Sarah Al-Hashemi (Immunologist)' },
+        authorRole: 'member',
+        date: '2026-10-07',
+        upvotes: 35,
+        title: {
+          ar: 'مستقبل لقاحات mRNA في استهداف الأورام السرطانية الشخصية (Personalized Oncology)',
+          en: 'The Future of mRNA Vaccines in Personalized Cancer Immunotherapy'
+        },
+        content: {
+          ar: 'تعتمد الفكرة الثورية الحالية على أخذ خزعة من ورم المريض، وإجراء تسلسل جيني سريع لاكتشاف المستضدات الجديدة (Neoantigens)، ثم تصنيع لقاح mRNA مخصص في غضون أسابيع يحفز خلايا T القاتلة لمهاجمة تلك الخلايا حصراً. ما هي التحديات السريرية التي لاحظتموها في التجارب الأخيرة؟',
+          en: 'The current breakthrough involves sequencing patient biopsy neoantigens and creating a custom mRNA vaccine within weeks to train CD8+ cytotoxic T cells. What are the key clinical hurdles you see in ongoing Phase III trials?'
+        },
+        tags: ['Immunology', 'mRNA', 'Oncology'],
+        replies: [
+          {
+            author: { ar: 'عمر التميمي (صيدلة إكلينيكية)', en: 'Omar Al-Tamimi (PharmD)' },
+            date: '2026-10-07',
+            content: {
+              ar: 'الورم السرطاني يمتلك بيئة مكروية مثبطة للمناعة (Immunosuppressive microenvironment) عبر مسار PD-1/PD-L1، ولذلك فإن دمج لقاحات mRNA مع مثبطات نقاط التفتيش المناعية هو الحل الأكثر فعالية.',
+              en: 'Tumor microenvironments suppress immune activity via PD-1 checkpoints, which is why pairing mRNA vaccines with checkpoint inhibitors shows superior efficacy.'
+            }
+          }
+        ]
+      },
+      {
+        id: 'post-phil-1',
+        category: 'philosophy',
+        author: { ar: 'طارق الزهراني (باحث في فلسفة العلم)', en: 'Tariq Al-Zahrani (Philosophy of Science)' },
+        authorRole: 'member',
+        date: '2026-10-06',
+        upvotes: 42,
+        title: {
+          ar: 'مبدأ الضبط الدقيق للكون (Fine-Tuning) بين فرضية الأكوان المتعددة وحتمية الغائية',
+          en: 'Cosmological Fine-Tuning: Multiverse Hypothesis vs. Teleological Necessity'
+        },
+        content: {
+          ar: 'ثوابت فيزيائية كالثابت الكوني (Lambda) وقوة التجاذب الجاذبي والكتل النسبية للكواركات تقع ضمن نطاقات متناهية الدقة تسمح بنشوء كيمياء مستقرة ونجوم تدعم الحياة. هل فرضية الأكوان المتعددة (Multiverse) تفسير علمي تجريبي قابل للاختبار أم أنها مجرد فرضية ميتافيزيقية موازية للغائية والتصميم الذكي؟',
+          en: 'Fundamental physical constants like the cosmological constant and quark masses fall into extremely narrow margins enabling chemistry and life. Is the Multiverse an empirically testable hypothesis, or a metaphysical stance parallel to teleology?'
+        },
+        tags: ['Fine-Tuning', 'Cosmology', 'Philosophy'],
+        replies: [
+          {
+            author: { ar: 'كمال الدين (فيزياء نظرية)', en: 'Kamal Al-Deen (Theoretical Physics)' },
+            date: '2026-10-07',
+            content: {
+              ar: 'طالما عجزنا عن قياس أو رصد الأكوان الأخرى خارج أفقنا الكوني، يظل الملتيفيرس نموذجاً رياضياً غير قابل للتكذيب (Unfalsifiable) بمعايير كارل بوبر الصارمة.',
+              en: 'As long as we cannot probe beyond our cosmic particle horizon, the multiverse remains mathematically intriguing yet unfalsifiable under Karl Popper criteria.'
+            }
+          }
+        ]
+      },
+      {
+        id: 'post-hist-1',
+        category: 'history',
+        author: { ar: 'د. فيصل العبدلي (مؤرخ علوم)', en: 'Dr. Faisal Al-Abdali (Science Historian)' },
+        authorRole: 'admin',
+        date: '2026-10-05',
+        upvotes: 51,
+        title: {
+          ar: 'ابن الهيثم وكتاب المناظر: الولادة الحقيقية للمنهج التجريبي الاستقرائي',
+          en: 'Ibn al-Haytham and the Book of Optics: The Birth of the Empirical Scientific Method'
+        },
+        content: {
+          ar: 'قبل فرانسيس بيكون وجاليليو بقرون، أسس الحسن بن الهيثم في القرن الحادي عشر الميلادي المنهج العلمي القائم على دمج الرياضيات بالرصد التجريبي المعملي، وتفكيك نظرية الانبعاث الإغريقية لصالح نظرية الانعكاس والورود للضوء. كيف أثر هذا التحول المنهجي على رواد عصر النهضة الأوروبية؟',
+          en: 'Centuries before Bacon and Galileo, Alhazen (Ibn al-Haytham) formalized empirical inquiry by combining mathematics with repeatable experimental physics and camera obscura testing. How did Latin translations of Kitab al-Manazir catalyze the European Renaissance?'
+        },
+        tags: ['Ibn Al-Haytham', 'Optics', 'History of Science'],
+        replies: [
+          {
+            author: { ar: 'زينب الشامي (تاريخ وحضارة)', en: 'Zainab Al-Shami (History Faculty)' },
+            date: '2026-10-06',
+            content: {
+              ar: 'ترجمة الكتاب للاتينية تحت اسم (De Aspectibus) كانت المرجع الأساسي لروجر بيكون، ويوحنا كبلر الذي أطلق على أحد أهم كتبه عنوان "استدراك على ابن الهيثم".',
+              en: 'The Latin translation (De Aspectibus) directly influenced Roger Bacon and Johannes Kepler, who titled a major treatise as a supplement to Witelo and Alhazen.'
+            }
+          }
+        ]
+      }
+    ];
+
+    function loadPosts() {
+      const stored = localStorage.getItem('sh_forum_posts');
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) {}
+      }
+      localStorage.setItem('sh_forum_posts', JSON.stringify(DEFAULT_POSTS));
+      return DEFAULT_POSTS;
+    }
+
+    let forumPosts = loadPosts();
+    let currentCategoryFilter = 'all';
+    let currentSearchTerm = '';
+
+    function savePosts() {
+      localStorage.setItem('sh_forum_posts', JSON.stringify(forumPosts));
+    }
+
+    function renderForumCategoryCounts() {
+      const counts = { biology: 0, medicine: 0, philosophy: 0, history: 0 };
+      forumPosts.forEach(p => {
+        if (counts[p.category] !== undefined) counts[p.category]++;
+      });
+
+      document.getElementById('count-all').textContent = forumPosts.length;
+      document.getElementById('count-biology').textContent = counts.biology;
+      document.getElementById('count-medicine').textContent = counts.medicine;
+      document.getElementById('count-philosophy').textContent = counts.philosophy;
+      document.getElementById('count-history').textContent = counts.history;
+    }
+
+    function setCategoryFilter(category) {
+      currentCategoryFilter = category;
+
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.className = 'filter-tab px-4 py-2 rounded-xl font-medium transition-colors whitespace-nowrap bg-slate-900 border border-slate-800 text-slate-300 hover:text-white';
+      });
+
+      const activeTab = document.getElementById(`tab-${category}`);
+      if (activeTab) {
+        activeTab.className = 'filter-tab px-4 py-2 rounded-xl font-black transition-colors whitespace-nowrap bg-cyan-500 text-slate-950';
+      }
+
+      document.querySelectorAll('.category-card').forEach(card => {
+        card.classList.remove('ring-2', 'ring-cyan-400', 'bg-slate-900/90');
+      });
+      const activeCard = document.getElementById(`catCard-${category}`);
+      if (activeCard) {
+        activeCard.classList.add('ring-2', 'ring-cyan-400', 'bg-slate-900/90');
+      }
+
+      renderForumPosts();
+    }
+
+    function handleForumSearch(term) {
+      currentSearchTerm = term.toLowerCase().trim();
+      renderForumPosts();
+    }
+
+    function getCategoryBadge(cat) {
+      const isRtl = currentLang === 'ar';
+      switch(cat) {
+        case 'biology':
+          return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono"><i data-lucide="dna" class="w-3.5 h-3.5"></i>${isRtl ? 'العلوم البيولوجية' : 'Biology'}</span>`;
+        case 'medicine':
+          return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono"><i data-lucide="activity" class="w-3.5 h-3.5"></i>${isRtl ? 'الطب والصحة' : 'Medicine & Health'}</span>`;
+        case 'philosophy':
+          return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20 font-mono"><i data-lucide="compass" class="w-3.5 h-3.5"></i>${isRtl ? 'الدين والفلسفة' : 'Religion & Philosophy'}</span>`;
+        case 'history':
+          return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono"><i data-lucide="scroll" class="w-3.5 h-3.5"></i>${isRtl ? 'تاريخ العلوم' : 'History of Science'}</span>`;
+        default:
+          return `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-slate-800 text-slate-300 font-mono">${cat}</span>`;
+      }
+    }
+
+    function renderForumPosts() {
+      const container = document.getElementById('postsContainer');
+      const isRtl = currentLang === 'ar';
+      const isAdmin = currentUser && currentUser.role === 'admin';
+
+      const filtered = forumPosts.filter(post => {
+        const matchesCat = currentCategoryFilter === 'all' || post.category === currentCategoryFilter;
+        if (!matchesCat) return false;
+
+        if (!currentSearchTerm) return true;
+
+        const titleText = (typeof post.title === 'object' ? (post.title[currentLang] || post.title.ar || '') : post.title).toLowerCase();
+        const contentText = (typeof post.content === 'object' ? (post.content[currentLang] || post.content.ar || '') : post.content).toLowerCase();
+        const authorText = (typeof post.author === 'object' ? (post.author[currentLang] || post.author.ar || '') : post.author).toLowerCase();
+        const tagsText = (post.tags || []).join(' ').toLowerCase();
+
+        return titleText.includes(currentSearchTerm) || contentText.includes(currentSearchTerm) || authorText.includes(currentSearchTerm) || tagsText.includes(currentSearchTerm);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-16 px-4 rounded-3xl glass-card border border-slate-800 space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-slate-900 text-slate-500 flex items-center justify-center mx-auto">
+              <i data-lucide="inbox" class="w-6 h-6"></i>
+            </div>
+            <p class="text-sm font-medium text-slate-300">${TRANSLATIONS[currentLang].emptyPosts}</p>
+            <button onclick="handleNewPostButtonClick()" class="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 text-xs font-bold hover:bg-cyan-400 transition-colors">
+              ${TRANSLATIONS[currentLang].btnNewPost}
+            </button>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = filtered.map(post => {
+        const postTitle = typeof post.title === 'object' ? (post.title[currentLang] || post.title.ar) : post.title;
+        const postContent = typeof post.content === 'object' ? (post.content[currentLang] || post.content.ar) : post.content;
+        const postAuthor = typeof post.author === 'object' ? (post.author[currentLang] || post.author.ar) : post.author;
+        const repliesCount = post.replies ? post.replies.length : 0;
+        const tagsHtml = (post.tags || []).map(t => `<span class="text-[11px] font-mono text-cyan-400/80">#${t}</span>`).join(' ');
+
+        const authorBadge = post.authorRole === 'admin'
+          ? `<span class="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 text-[10px] font-mono border border-cyan-500/40">${TRANSLATIONS[currentLang].badgeAdmin}</span>`
+          : '';
+
+        return `
+          <article class="glass-card rounded-2xl border border-slate-800 p-5 sm:p-6 space-y-4 hover:border-slate-700 transition-all relative">
+            <div class="flex flex-wrap items-center justify-between gap-2.5">
+              <div class="flex items-center gap-2">
+                ${getCategoryBadge(post.category)}
+                <span class="text-slate-600">·</span>
+                <span class="text-xs text-slate-300 font-bold flex items-center gap-1.5">
+                  ${postAuthor} ${authorBadge}
+                </span>
+                <span class="text-slate-600">·</span>
+                <span class="text-xs font-mono text-slate-500">${post.date}</span>
+              </div>
+
+              <div class="flex items-center gap-2">
+                ${isAdmin ? `
+                  <button onclick="handleDeletePost('${post.id}')" class="px-2 py-1 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-400 hover:text-white text-[11px] font-bold flex items-center gap-1" title="${TRANSLATIONS[currentLang].deletePostBtn}">
+                    <i data-lucide="trash" class="w-3.5 h-3.5"></i>
+                    <span class="hidden sm:inline">${TRANSLATIONS[currentLang].deletePostBtn}</span>
+                  </button>
+                ` : ''}
+                <button onclick="handleUpvote('${post.id}')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-950 hover:bg-cyan-950/40 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 text-xs font-mono font-bold transition-colors">
+                  <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i>
+                  <span id="upvote-count-${post.id}">${post.upvotes}</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <h3 class="text-base sm:text-lg font-bold text-white leading-snug">
+                ${postTitle}
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line">
+                ${postContent}
+              </p>
+              ${tagsHtml ? `<div class="pt-1 flex flex-wrap gap-2">${tagsHtml}</div>` : ''}
+            </div>
+
+            <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+              <button onclick="toggleReplies('${post.id}')" class="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 font-bold transition-colors">
+                <i data-lucide="message-circle" class="w-4 h-4"></i>
+                <span>${TRANSLATIONS[currentLang].repliesTitle} (${repliesCount})</span>
+              </button>
+
+              <button onclick="toggleReplyForm('${post.id}')" class="flex items-center gap-1 text-slate-400 hover:text-white transition-colors">
+                <i data-lucide="corner-down-left" class="w-3.5 h-3.5 ${isRtl ? '' : 'rotate-180'}"></i>
+                <span>${TRANSLATIONS[currentLang].btnReply}</span>
+              </button>
+            </div>
+
+            <div id="replies-container-${post.id}" class="hidden space-y-3 pt-3 border-t border-slate-800/60">
+              <div id="replies-list-${post.id}" class="space-y-2.5">
+                ${renderRepliesList(post.replies)}
+              </div>
+
+              <div id="reply-form-${post.id}" class="pt-2 space-y-2 bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">
+                <textarea id="reply-content-${post.id}" rows="2" placeholder="${TRANSLATIONS[currentLang].replyPlaceholder}" onfocus="if(!currentUser){ this.blur(); requireAuth('reply', () => { toggleReplyForm('${post.id}'); }); }" class="w-full px-3 py-2 rounded-lg border border-slate-800 bg-slate-900 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-400"></textarea>
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] text-slate-500">${currentUser ? `${currentLang === 'ar' ? 'التعليق باسم:' : 'Replying as:'} ${currentUser.name}` : (currentLang === 'ar' ? 'سيتطلب تسجيل الدخول الاجتماعي' : 'Social login required')}</span>
+                  <button onclick="submitReply('${post.id}')" class="px-4 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-1 transition-colors">
+                    <i data-lucide="send" class="w-3 h-3 ${isRtl ? 'rotate-180' : ''}"></i>
+                    <span>${TRANSLATIONS[currentLang].btnSendReply}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function renderRepliesList(replies) {
+      if (!replies || replies.length === 0) {
+        return `<p class="text-xs text-slate-500 italic p-2">${TRANSLATIONS[currentLang].noRepliesYet}</p>`;
+      }
+
+      return replies.map(r => {
+        const author = typeof r.author === 'object' ? (r.author[currentLang] || r.author.ar) : r.author;
+        const content = typeof r.content === 'object' ? (r.content[currentLang] || r.content.ar) : r.content;
+
+        return `
+          <div class="bg-slate-900/70 p-3 rounded-xl border border-slate-800 text-xs space-y-1">
+            <div class="flex items-center justify-between text-slate-400">
+              <span class="font-bold text-cyan-300">${author}</span>
+              <span class="font-mono text-[10px] text-slate-500">${r.date}</span>
+            </div>
+            <p class="text-slate-300 leading-relaxed">${content}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleReplies(postId) {
+      const el = document.getElementById(`replies-container-${postId}`);
+      if (el) el.classList.toggle('hidden');
+    }
+
+    function toggleReplyForm(postId) {
+      requireAuth('reply', () => {
+        const container = document.getElementById(`replies-container-${postId}`);
+        if (container && container.classList.contains('hidden')) {
+          container.classList.remove('hidden');
+        }
+        const input = document.getElementById(`reply-content-${postId}`);
+        if (input) input.focus();
+      });
+    }
+
+    function handleUpvote(postId) {
+      requireAuth('like', () => {
+        const post = forumPosts.find(p => p.id === postId);
+        if (!post) return;
+
+        const upvotedKey = `sh_upvoted_${postId}`;
+        if (localStorage.getItem(upvotedKey)) {
+          post.upvotes = Math.max(0, post.upvotes - 1);
+          localStorage.removeItem(upvotedKey);
+        } else {
+          post.upvotes += 1;
+          localStorage.setItem(upvotedKey, 'true');
+        }
+
+        savePosts();
+        const upEl = document.getElementById(`upvote-count-${postId}`);
+        if (upEl) upEl.textContent = post.upvotes;
+      });
+    }
+
+    function handleNewPostButtonClick() {
+      requireAuth('post', () => {
+        document.getElementById('postAuthor').value = currentUser.name;
+        openNewPostModal();
+      });
+    }
+
+    function openNewPostModal() {
+      document.getElementById('newPostModal').classList.remove('hidden');
+    }
+    function closeNewPostModal() {
+      document.getElementById('newPostModal').classList.add('hidden');
+    }
+
+    function handleCreatePost(e) {
+      e.preventDefault();
+
+      if (!currentUser) {
+        openAuthModal('social', 'post');
+        return;
+      }
+
+      if (currentUser.isBanned) {
+        showToast(currentLang === 'ar' ? 'حسابك محظور من النشر!' : 'Your account is banned!', 'error');
+        return;
+      }
+
+      const author = document.getElementById('postAuthor').value.trim() || currentUser.name;
+      const category = document.getElementById('postCategory').value;
+      const title = document.getElementById('postTitle').value.trim();
+      const content = document.getElementById('postContent').value.trim();
+      const rawTags = document.getElementById('postTags').value.trim();
+      const tags = rawTags ? rawTags.split(',').map(t => t.trim()).filter(Boolean) : [];
+
+      if (!author || !title || !content) return;
+
+      const newPost = {
+        id: 'post-' + Date.now(),
+        category: category,
+        author: author,
+        authorRole: currentUser.role,
+        date: new Date().toISOString().split('T')[0],
+        upvotes: 1,
+        title: title,
+        content: content,
+        tags: tags,
+        replies: []
+      };
+
+      forumPosts.unshift(newPost);
+      savePosts();
+
+      document.getElementById('newPostForm').reset();
+      closeNewPostModal();
+
+      currentCategoryFilter = category;
+      renderForumCategoryCounts();
+      setCategoryFilter(category);
+      showToast(currentLang === 'ar' ? 'تم نشر موضوعك بنجاح في ساحة النقاش!' : 'Post published to the community forum!', 'success');
+    }
+
+    function submitReply(postId) {
+      if (!currentUser) {
+        showToast(currentLang === 'ar' ? 'يرجى تسجيل الدخول للرد على المنشور!' : 'Please log in to reply!', 'info');
+        openAuthModal('login');
+        return;
+      }
+
+      if (currentUser.isBanned) {
+        showToast(currentLang === 'ar' ? 'حسابك محظور من المشاركة!' : 'Your account is banned from commenting!', 'error');
+        return;
+      }
+
+      const contentInput = document.getElementById(`reply-content-${postId}`);
+      const content = contentInput.value.trim();
+      if (!content) return;
+
+      const post = forumPosts.find(p => p.id === postId);
+      if (!post) return;
+
+      if (!post.replies) post.replies = [];
+
+      post.replies.push({
+        author: currentUser.name + (currentUser.role === 'admin' ? ` (${TRANSLATIONS[currentLang].badgeAdmin})` : ''),
+        date: new Date().toISOString().split('T')[0],
+        content: content
+      });
+
+      savePosts();
+      contentInput.value = '';
+
+      document.getElementById(`replies-list-${postId}`).innerHTML = renderRepliesList(post.replies);
+      renderForumCategoryCounts();
+      renderForumPosts();
+      showToast(currentLang === 'ar' ? 'تمت إضافة ردك العلمي.' : 'Reply posted.', 'success');
+    }
+
+    function handleDeletePost(postId) {
+      if (!currentUser || currentUser.role !== 'admin') {
+        showToast(currentLang === 'ar' ? 'صلاحية الحذف مقتصرة على المشرف فقط!' : 'Only administrators can delete posts!', 'error');
+        return;
+      }
+
+      if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا المنشور نهائياً من الساحة؟' : 'Confirm permanent deletion of this post?')) return;
+
+      forumPosts = forumPosts.filter(p => p.id !== postId);
+      savePosts();
+      renderForumCategoryCounts();
+      renderForumPosts();
+      showToast(currentLang === 'ar' ? 'تم حذف المنشور من الساحة بنجاح.' : 'Post deleted by administrator.', 'info');
+    }
+
+    // ---------- 5. DAILY FACTS HANDLER ----------
+    const DAILY_FACTS = [
+      {
+        fact: {
+          ar: 'ملعقة صغيرة واحدة من مادة نجم نيوتروني تزن حوالي 6 مليارات طن على كوكب الأرض.',
+          en: 'A single teaspoon of neutron star material would weigh roughly 6 billion tons on Earth.'
+        },
+        context: {
+          ar: 'عندما تنهار النجوم الضخمة إلى نجوم نيوترونية، تضغط الجاذبية البروتونات والإلكترونات لتصبح نيوترونات بكثافة نووية هائلة تفوق الخيال (حوالي 4×10¹⁷ كجم/م³).',
+          en: 'When massive stars collapse into neutron stars, gravity squeezes protons and electrons into neutrons at nuclear densities (approx. 4×10¹⁷ kg/m³).'
+        },
+        source: 'NASA Goddard Space Flight Center / Astrophysical Journal'
+      },
+      {
+        fact: {
+          ar: 'كوكب الزهرة يستغرق 243 يوماً أرضياً ليكمل دورة حول محوره، و 225 يوماً فقط ليدور حول الشمس، مما يجعل يومه أطول من سنته!',
+          en: 'Venus takes 243 Earth days to rotate on its axis, but only 225 Earth days to orbit the Sun—making its day longer than its year.'
+        },
+        context: {
+          ar: 'يدور كوكب الزهرة بحركة تراجعية بطيئة للغاية ناتجة عن اصطدامات كوكبية عملاقة وتأثير الكبح المدّي لغلافه الجوي الفائق الكثافة.',
+          en: 'Venus has a slow retrograde rotation likely caused by ancient giant impacts and atmospheric tidal braking from its hyper-dense atmosphere.'
+        },
+        source: 'NASA Jet Propulsion Laboratory (JPL)'
+      },
+      {
+        fact: {
+          ar: 'تستطيع دببة الماء (التارديغرادا) البقاء على قيد الحياة في الفراغ الكوني التام، وتحت إشعاعات تفوق الجرعة القاتلة للبشر بمئات المرات.',
+          en: 'Tardigrades can survive outer space vacuum and ionizing radiation hundreds of times lethal human doses.'
+        },
+        context: {
+          ar: 'تدخل هذه الكائنات المجهرية في حالة سبات حيوي (Cryptobiosis) تطرد فيها 99% من ماء جسدها وتحمي حمضها النووي ببروتينات خاصة تمنع تكسره.',
+          en: 'They enter cryptobiosis, expelling body water and coating chromosomes with unique intrinsically disordered proteins.'
+        },
+        source: 'European Space Agency (ESA) FOTON-M3 Mission'
+      },
+      {
+        fact: {
+          ar: 'إذا قمت بفرد جميع سلاسل الحمض النووي (DNA) في جسم إنسان بالغ، فستمتد مسافة تزيد عن 100 مليار كيلومتر، لتصل إلى كوكب بلوتو وتعود!',
+          en: 'If unraveled, the DNA in an adult human body would stretch over 67 billion miles, reaching Pluto and back multiple times.'
+        },
+        context: {
+          ar: 'تحتوي كل خلية على مترين من خيوط DNA الملفوفة بإحكام فائق داخل الكروموسومات، وجسدك يضم ما يقارب 37 تريليون خلية تعمل بانسجام.',
+          en: 'Each human cell packs ~2 meters of DNA, and the human body contains around 37 trillion cells.'
+        },
+        source: 'National Human Genome Research Institute (NHGRI)'
+      }
+    ];
+
+    let currentFactIndex = 0;
+
+    function renderFact() {
+      const f = DAILY_FACTS[currentFactIndex];
+      document.getElementById('factIndexText').textContent = `#${currentFactIndex + 1} / ${DAILY_FACTS.length}`;
+      document.getElementById('factQuote').textContent = `"${f.fact[currentLang] || f.fact.ar}"`;
+      document.getElementById('factContext').textContent = f.context[currentLang] || f.context.ar;
+      document.getElementById('factSource').textContent = f.source;
+      lucide.createIcons();
+    }
+
+    function nextFact() {
+      currentFactIndex = (currentFactIndex + 1) % DAILY_FACTS.length;
+      renderFact();
+    }
+
+    async function copyFactText() {
+      const f = DAILY_FACTS[currentFactIndex];
+      const text = `"${f.fact[currentLang] || f.fact.ar}" — ${f.source} (via Science Horizon)`;
+      try {
+        await navigator.clipboard.writeText(text);
+        const icon = document.getElementById('factCopyIcon');
+        icon.setAttribute('data-lucide', 'check');
+        lucide.createIcons();
+        showToast(currentLang === 'ar' ? 'تم نسخ الحقيقة إلى الحافظة' : 'Copied to clipboard', 'success');
+        setTimeout(() => {
+          icon.setAttribute('data-lucide', 'copy');
+          lucide.createIcons();
+        }, 2000);
+      } catch (err) {}
+    }
+
+    // ---------- 6. INTERACTIVE QUIZ DATA & HANDLERS ----------
+    const QUIZ_QUESTIONS = [
+      {
+        category: { ar: 'العلوم البيولوجية', en: 'Biological Sciences' },
+        question: {
+          ar: 'أي عُضَيّة خلوية مسؤولة عن توليد ثلاثي فوسفات الأدينوسين (ATP) عبر الفسفرة التأكسدية؟',
+          en: 'Which cellular organelle generates adenosine triphosphate (ATP) via oxidative phosphorylation?'
+        },
+        options: {
+          ar: ['الميتوكوندريا', 'الشبكة الإندوبلازمية', 'جهاز غولجي', 'الجسيم الحال'],
+          en: ['Mitochondria', 'Endoplasmic Reticulum', 'Golgi Apparatus', 'Lysosome']
+        },
+        correct: 0,
+        explanation: {
+          ar: 'الميتوكوندريا هي محطات توليد الطاقة في الخلايا الحية حقيقية النواة؛ حيث تدير سلاسل نقل الإلكترون لتوليد عملة الطاقة الكيميائية ATP.',
+          en: 'Mitochondria are the powerhouses of eukaryotic cells, utilizing electron transport chains to drive ATP synthesis.'
+        }
+      },
+      {
+        category: { ar: 'الطب والعلوم الصحية', en: 'Medicine & Health Sciences' },
+        question: {
+          ar: 'ما هي الخلايا المناعية التكيفية المسؤولة مباشرة عن إفراز الأجسام المضادة (Antibodies)؟',
+          en: 'Which adaptive immune cells are directly responsible for secreting specific antibodies?'
+        },
+        options: {
+          ar: ['الخلايا البائية البلازمية (Plasma B cells)', 'الخلايا التائية القاتلة (CD8+ T cells)', 'الخلايا البلعمية الكبيرة (Macrophages)', 'الخلايا المتعادلة (Neutrophils)'],
+          en: ['Plasma B cells', 'Cytotoxic CD8+ T cells', 'Macrophages', 'Neutrophils']
+        },
+        correct: 0,
+        explanation: {
+          ar: 'عند تنشيط الخلايا البائية بمستضد محدد ومساعدة الخلايا التائية المساعدة، تتمايز إلى خلايا بلازمية تفرز آلاف الأجسام المضادة في الثانية.',
+          en: 'Upon antigenic activation and T-helper stimulation, B-lymphocytes differentiate into plasma cells that secrete thousands of antibody proteins per second.'
+        }
+      },
+      {
+        category: { ar: 'الجانب الديني والفلسفي', en: 'Religion & Philosophy' },
+        question: {
+          ar: 'ما هو المفهوم الفلسفي الذي يعبر عن استحالة اختزال تجربة الوعي الذاتي والنوعي (مثل رؤية اللون الأحمر) إلى مجرد تفاعلات عصبية مادية؟',
+          en: 'Which philosophical concept refers to the subjective, qualitative aspects of conscious experience (e.g., seeing red)?'
+        },
+        options: {
+          ar: ['الكواليا (Qualia)', 'الحتمية الفيزيائية (Physicalism)', 'الامتداد الديكارتي (Res Extensa)', 'الوضعية المنطقية (Logical Positivism)'],
+          en: ['Qualia (Qualitative Experience)', 'Strict Physicalism', 'Cartesian Res Extensa', 'Logical Positivism']
+        },
+        correct: 0,
+        explanation: {
+          ar: 'الكواليا (Qualia) تمثل "المشكلة الصعبة للوعي" كما صاغها الفيلسوف ديفيد تشالمرز؛ وهي الطريقة التي تظهر بها التجارب الشعورية الحسية للذات الواعية.',
+          en: 'Qualia represents the "Hard Problem of Consciousness" formulated by David Chalmers, denoting subjective conscious experiences irreducible to physical mechanisms.'
+        }
+      },
+      {
+        category: { ar: 'تاريخ العلوم', en: 'History of Science' },
+        question: {
+          ar: 'من هو العالم المسلم الذي قام بقياس محيط الأرض بدقة متناهية (نسبة خطأ أقل من 1%) باستخدام علم المثلثات من قمة جبل في القرن 11 الميلادي؟',
+          en: 'Which medieval Islamic polymath measured the circumference of the Earth with under 1% error using spherical trigonometry from a mountain peak?'
+        },
+        options: {
+          ar: ['أبو الريحان البيروني', 'الخوارزمي', 'ابن سينا', 'جابر بن حيان'],
+          en: ['Abu Rayhan al-Biruni', 'Al-Khwarizmi', 'Ibn Sina (Avicenna)', 'Jabir ibn Hayyan']
+        },
+        correct: 0,
+        explanation: {
+          ar: 'ابتكر البيروني في قلعة ناندانا طريقته العبقرية بحساب زاوية انخفاض خط الأفق من قمة جبل، وقاس نصف قطر الأرض ومحيطها بدقة مذهلة سبقت أوروبا بقرون.',
+          en: 'Al-Biruni devised a groundbreaking trigonometric method at Nandana Fort measuring the horizon dip angle from a mountain to compute Earth’s radius with astonishing accuracy.'
+        }
+      }
+    ];
+
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+
+    function renderQuiz() {
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      document.getElementById('quizNumber').textContent = currentQuizIndex + 1;
+      document.getElementById('quizTotal').textContent = QUIZ_QUESTIONS.length;
+      document.getElementById('quizScore').textContent = quizScore;
+      document.getElementById('quizCategoryBadge').textContent = q.category[currentLang] || q.category.ar;
+      document.getElementById('quizQuestionText').textContent = q.question[currentLang] || q.question.ar;
+
+      const progressPercent = Math.round(((currentQuizIndex) / QUIZ_QUESTIONS.length) * 100);
+      document.getElementById('quizProgressBar').style.width = `${Math.max(15, progressPercent)}%`;
+
+      const options = q.options[currentLang] || q.options.ar;
+      const container = document.getElementById('quizOptionsContainer');
+
+      const guestNoticeHtml = !currentUser ? `
+        <div class="flex items-center justify-between p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs mb-3">
+          <div class="flex items-center gap-2">
+            <i data-lucide="lock" class="w-4 h-4 text-amber-400 shrink-0"></i>
+            <span>${TRANSLATIONS[currentLang].quizGuestNotice}</span>
+          </div>
+          <button onclick="openAuthModal('social', 'quiz')" class="px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-bold text-xs shrink-0 hover:bg-amber-400 transition-colors shadow">
+            ${TRANSLATIONS[currentLang].btnLogin}
+          </button>
+        </div>
+      ` : '';
+
+      container.innerHTML = guestNoticeHtml + options.map((opt, idx) => `
+        <button onclick="handleQuizOptionClick(${idx})" id="quiz-opt-${idx}" class="quiz-option-btn w-full text-start p-4 rounded-2xl border border-slate-800 bg-slate-950/80 hover:bg-slate-900 text-xs sm:text-sm font-medium transition-all flex items-center justify-between min-h-[50px] group">
+          <span class="flex items-center gap-3">
+            <span class="w-6 h-6 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-mono text-cyan-400 flex items-center justify-center group-hover:border-cyan-500/50">${String.fromCharCode(65 + idx)}</span>
+            <span>${opt}</span>
+          </span>
+          <span id="quiz-opt-icon-${idx}">
+            ${!currentUser ? '<i data-lucide="lock" class="w-3.5 h-3.5 text-slate-600 group-hover:text-amber-400 transition-colors"></i>' : ''}
+          </span>
+        </button>
+      `).join('');
+
+      document.getElementById('quizFeedbackBox').classList.add('hidden');
+      document.getElementById('quizNextBtn').classList.add('hidden');
+      quizAnswered = false;
+      lucide.createIcons();
+    }
+
+    function handleQuizOptionClick(selectedIndex) {
+      requireAuth('quiz', () => {
+        handleQuizAnswer(selectedIndex);
+      });
+    }
+
+    function handleQuizAnswer(selectedIndex) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      const isCorrect = selectedIndex === q.correct;
+
+      if (isCorrect) quizScore++;
+      document.getElementById('quizScore').textContent = quizScore;
+
+      q.options.ar.forEach((_, idx) => {
+        const btn = document.getElementById(`quiz-opt-${idx}`);
+        if (!btn) return;
+        btn.disabled = true;
+
+        if (idx === q.correct) {
+          btn.className = 'quiz-option-btn w-full text-start p-4 rounded-2xl border border-emerald-500 bg-emerald-950/30 text-emerald-200 text-xs sm:text-sm font-bold flex items-center justify-between min-h-[50px]';
+          document.getElementById(`quiz-opt-icon-${idx}`).innerHTML = '<i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>';
+        } else if (idx === selectedIndex) {
+          btn.className = 'quiz-option-btn w-full text-start p-4 rounded-2xl border border-rose-500 bg-rose-950/30 text-rose-200 text-xs sm:text-sm font-bold flex items-center justify-between min-h-[50px]';
+          document.getElementById(`quiz-opt-icon-${idx}`).innerHTML = '<i data-lucide="x-circle" class="w-5 h-5 text-rose-400"></i>';
+        } else {
+          btn.classList.add('opacity-40');
+        }
+      });
+
+      const feedbackBox = document.getElementById('quizFeedbackBox');
+      const feedbackTitle = document.getElementById('quizFeedbackTitle');
+      const feedbackExp = document.getElementById('quizFeedbackExplanation');
+
+      feedbackBox.classList.remove('hidden', 'border-emerald-500/30', 'bg-emerald-950/20', 'border-rose-500/30', 'bg-rose-950/20');
+      if (isCorrect) {
+        feedbackBox.classList.add('border-emerald-500/30', 'bg-emerald-950/20');
+        feedbackTitle.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> <span class="text-emerald-300 font-bold">${currentLang === 'ar' ? 'إجابة صحيحة وموفقة!' : 'Correct Answer!'}</span>`;
+      } else {
+        feedbackBox.classList.add('border-rose-500/30', 'bg-rose-950/20');
+        feedbackTitle.innerHTML = `<i data-lucide="x-circle" class="w-4 h-4 text-rose-400"></i> <span class="text-rose-300 font-bold">${currentLang === 'ar' ? 'إجابة غير دقيقة' : 'Incorrect'}</span>`;
+      }
+
+      feedbackExp.textContent = q.explanation[currentLang] || q.explanation.ar;
+
+      const nextBtn = document.getElementById('quizNextBtn');
+      const nextText = document.getElementById('quizNextText');
+      nextBtn.classList.remove('hidden');
+
+      if (currentQuizIndex === QUIZ_QUESTIONS.length - 1) {
+        nextText.textContent = currentLang === 'ar' ? 'عرض النتيجة النهائية' : 'View Final Score';
+      } else {
+        nextText.textContent = currentLang === 'ar' ? 'السؤال التالي' : 'Next Question';
+      }
+
+      lucide.createIcons();
+    }
+
+    function handleQuizNext() {
+      if (currentQuizIndex < QUIZ_QUESTIONS.length - 1) {
+        currentQuizIndex++;
+        renderQuiz();
+      } else {
+        showQuizResults();
+      }
+    }
+
+    function showQuizResults() {
+      const container = document.getElementById('quizContainer');
+      const percent = Math.round((quizScore / QUIZ_QUESTIONS.length) * 100);
+      const isRtl = currentLang === 'ar';
+
+      container.innerHTML = `
+        <div class="text-center py-10 space-y-6">
+          <div class="w-16 h-16 rounded-3xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mx-auto shadow-lg shadow-cyan-500/20">
+            <i data-lucide="award" class="w-8 h-8"></i>
+          </div>
+          <div class="space-y-2">
+            <h3 class="text-2xl font-black text-white">
+              ${isRtl ? 'اكتمل الاختبار العلمي بنجاح!' : 'Quiz Completed Successfully!'}
+            </h3>
+            <p class="text-sm text-slate-300">
+              ${isRtl ? 'حصلت على' : 'You scored'} 
+              <span class="text-cyan-400 font-mono text-2xl font-black mx-1">${quizScore}</span>
+              / <span class="font-mono text-xl">${QUIZ_QUESTIONS.length}</span>
+              (${percent}%)
+            </p>
+          </div>
+          <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button onclick="restartQuiz()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all">
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+              <span>${isRtl ? 'إعادة الاختبار من البداية' : 'Retake Quiz'}</span>
+            </button>
+            <button onclick="handleSaveQuizScore()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-cyan-500/25">
+              <i data-lucide="bookmark-check" class="w-4 h-4"></i>
+              <span>${TRANSLATIONS[currentLang].saveQuizScoreBtn}</span>
+            </button>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function handleSaveQuizScore() {
+      requireAuth('quiz_save', () => {
+        if (!currentUser) return;
+        currentUser.quizHighScore = Math.max(currentUser.quizHighScore || 0, quizScore);
+        currentUser.lastQuizScore = quizScore;
+        currentUser.quizSavedAt = new Date().toISOString();
+
+        const idx = usersList.findIndex(u => u.id === currentUser.id);
+        if (idx !== -1) {
+          usersList[idx] = { ...usersList[idx], ...currentUser };
+          saveUsers();
+        }
+        localStorage.setItem('sh_current_user', JSON.stringify(currentUser));
+        showToast(TRANSLATIONS[currentLang].quizScoreSaved, 'success');
+      });
+    }
+
+    function restartQuiz() {
+      currentQuizIndex = 0;
+      quizScore = 0;
+      quizAnswered = false;
+      renderQuiz();
+    }
+
+    // ---------- 7. GENERAL TRANSLATIONS & LIFECYCLE ----------
+    function applyTranslations() {
+      const isRtl = currentLang === 'ar';
+      document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+      document.documentElement.lang = currentLang;
+
+      document.getElementById('langBtnText').textContent = isRtl ? 'EN' : 'العربية';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) {
+          el.textContent = TRANSLATIONS[currentLang][key];
+        }
+      });
+
+      const searchInput = document.getElementById('forumSearch');
+      if (searchInput) {
+        searchInput.placeholder = isRtl ? 'ابحث في النقاشات...' : 'Search discussions...';
+      }
+
+      renderAuthUI();
+      renderForumCategoryCounts();
+      renderForumPosts();
+      renderVideoGrid();
+      renderFact();
+      renderQuiz();
+      lucide.createIcons();
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'ar' ? 'en' : 'ar';
+      localStorage.setItem('sh_lang', currentLang);
+      applyTranslations();
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobileMenu').classList.add('hidden');
+    }
+
+    // Initialize on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      applyTranslations();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

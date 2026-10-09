@@ -1,0 +1,6 @@
+{
+  "name": "Science Horizon - Discover the Science Behind Everything",
+  "description": "Bilingual mobile-first science media hub and companion for science YouTube channel featuring video library, peer-referenced articles, daily facts, and interactive science quizzes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
