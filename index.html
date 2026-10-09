@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Science Horizon – منصة المجتمع والنقاش العلمي ونظام الإدارة</title>
-  <meta name="description" content="منصة المجتمع والنقاش العلمي التفاعلية لقناة ساينس هورايزون مع نظام إدارة الصلاحيات والأعضاء والمحتوى المرئي." />
+  <title>MR.science.V – منصة المجتمع والنقاش العلمي ونظام الإدارة</title>
+  <meta name="description" content="منصة المجتمع والنقاش العلمي التفاعلية لقناة MR.science.V مع نظام إدارة الصلاحيات والأعضاء والمحتوى المرئي." />
 
   <!-- Google Fonts: Cairo (Arabic) & Plus Jakarta Sans (English) & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -82,9 +82,29 @@
     .badge-glow {
       box-shadow: 0 0 12px rgba(6, 182, 212, 0.35);
     }
+    /* Fixed Watermark of Channel Logo in Background */
+    .watermark-bg {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(85vw, 550px);
+      height: min(85vw, 550px);
+      background-image: url('https://yt3.googleusercontent.com/csrhDa5uJ2a4pYHR69llcVz3k4tHkIK8x3JFfGBuhsC4Ue_xAAgd4fzmEc47UJg-rX3ipqFX3Q=s160-c-k-c0x00ffffff-no-rj');
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 0;
+      filter: grayscale(100%);
+    }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 min-h-screen flex flex-col overflow-x-hidden w-full">
+<body class="bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 min-h-screen flex flex-col overflow-x-hidden w-full relative">
+
+  <!-- Fixed Watermark for Channel Logo -->
+  <div class="watermark-bg" aria-hidden="true"></div>
 
   <!-- ================= TOAST NOTIFICATION CONTAINER ================= -->
   <div id="toastContainer" class="fixed top-20 start-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none transition-all"></div>
@@ -94,16 +114,16 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
       
       <!-- Brand Logo -->
-      <a href="#hero" class="flex items-center gap-3 group focus:outline-none shrink-0">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-          <i data-lucide="atom" class="w-6 h-6"></i>
+      <a href="#hero" class="flex items-center gap-2.5 sm:gap-3 group focus:outline-none shrink-0">
+        <div class="w-10 h-10 rounded-xl overflow-hidden ring-2 ring-cyan-500/40 shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform shrink-0 bg-slate-900 flex items-center justify-center">
+          <img src="https://yt3.googleusercontent.com/csrhDa5uJ2a4pYHR69llcVz3k4tHkIK8x3JFfGBuhsC4Ue_xAAgd4fzmEc47UJg-rX3ipqFX3Q=s160-c-k-c0x00ffffff-no-rj" alt="MR.science.V Logo" class="w-full h-full object-cover" />
         </div>
         <div class="flex flex-col">
           <span class="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-cyan-400 transition-colors" data-i18n="brandName">
-            ساينس هورايزون
+            MR.science.V
           </span>
           <span class="text-[10px] tracking-wider uppercase text-cyan-400 font-mono hidden sm:inline" data-i18n="brandSub">
-            SCIENCE HORIZON COMMUNITY
+            MR.SCIENCE.V COMMUNITY
           </span>
         </div>
       </a>
@@ -141,7 +161,7 @@
         </button>
 
         <!-- YouTube Channel Button -->
-        <a href="https://youtube.com/@ScienceHorizon" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-500 rounded-xl shadow-md shadow-red-600/30 transition-all hover:scale-105 min-h-[40px]">
+        <a href="https://www.youtube.com/@robofrog9138" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-500 rounded-xl shadow-md shadow-red-600/30 transition-all hover:scale-105 min-h-[40px]">
           <i data-lucide="youtube" class="w-4 h-4"></i>
           <span class="hidden xl:inline" data-i18n="btnSubscribe">قناة اليوتيوب</span>
         </a>
@@ -172,7 +192,7 @@
       </div>
 
       <div class="pt-2 border-t border-slate-800">
-        <a href="https://youtube.com/@ScienceHorizon" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-red-600 text-white font-bold text-xs shadow-md">
+        <a href="https://www.youtube.com/@robofrog9138" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-red-600 text-white font-bold text-xs shadow-md">
           <i data-lucide="youtube" class="w-4 h-4"></i>
           <span data-i18n="btnSubscribe">اشترك في القناة</span>
         </a>
@@ -207,7 +227,7 @@
           <span data-i18n="heroJoinForum">انضم لساحة النقاش العلمي</span>
         </a>
 
-        <a href="https://youtube.com/@ScienceHorizon" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-red-500/40 bg-red-950/30 hover:bg-red-900/50 text-white font-bold text-sm transition-all min-h-[48px]">
+        <a href="https://www.youtube.com/@robofrog9138" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-red-500/40 bg-red-950/30 hover:bg-red-900/50 text-white font-bold text-sm transition-all min-h-[48px]">
           <i data-lucide="youtube" class="w-5 h-5 text-red-500"></i>
           <span data-i18n="btnSubscribe">قناة اليوتيوب</span>
         </a>
@@ -807,23 +827,23 @@
         <!-- Brand Info -->
         <div class="md:col-span-2 space-y-3">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center">
-              <i data-lucide="atom" class="w-5 h-5"></i>
+            <div class="w-9 h-9 rounded-xl overflow-hidden ring-1 ring-cyan-500/30 shrink-0 bg-slate-900 flex items-center justify-center">
+              <img src="https://yt3.googleusercontent.com/csrhDa5uJ2a4pYHR69llcVz3k4tHkIK8x3JFfGBuhsC4Ue_xAAgd4fzmEc47UJg-rX3ipqFX3Q=s160-c-k-c0x00ffffff-no-rj" alt="MR.science.V" class="w-full h-full object-cover" />
             </div>
-            <span class="text-lg font-bold text-white tracking-tight" data-i18n="brandName">ساينس هورايزون</span>
+            <span class="text-lg font-bold text-white tracking-tight" data-i18n="brandName">MR.science.V</span>
           </div>
           <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md" data-i18n="footerMission">
-            منصة مجتمع ونقاش علمي تابعة لقناة يوتيوب متخصصة في نشر المعرفة التجريبية، وتبسيط الفيزياء والأحياء والطب والفلسفة بروح البحث الأكاديمي الرصين.
+            منصة مجتمع ونقاش علمي تابعة لقناة يوتيوب MR.science.V متخصصة في نشر المعرفة التجريبية، وتبسيط الفيزياء والأحياء والطب والفلسفة بروح البحث الأكاديمي الرصين.
           </p>
           <div class="flex items-center gap-3 pt-2">
-            <a href="https://youtube.com/@ScienceHorizon" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-red-500 flex items-center justify-center transition-colors">
+            <a href="https://www.youtube.com/@robofrog9138" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-red-500 flex items-center justify-center transition-colors">
               <i data-lucide="youtube" class="w-4 h-4"></i>
             </a>
-            <a href="https://twitter.com/ScienceHorizon" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-400 flex items-center justify-center transition-colors">
-              <i data-lucide="twitter" class="w-4 h-4"></i>
+            <a href="https://www.youtube.com/@robofrog9138" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-400 flex items-center justify-center transition-colors">
+              <i data-lucide="video" class="w-4 h-4"></i>
             </a>
-            <a href="https://github.com/ScienceHorizon" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition-colors">
-              <i data-lucide="github" class="w-4 h-4"></i>
+            <a href="https://www.youtube.com/@robofrog9138" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition-colors">
+              <i data-lucide="external-link" class="w-4 h-4"></i>
             </a>
           </div>
         </div>
@@ -849,7 +869,7 @@
       </div>
 
       <div class="pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 font-mono">
-        <p data-i18n="footerCopyright">© 2026 Science Horizon Media. جميع الحقوق محفوظة.</p>
+        <p data-i18n="footerCopyright">© 2026 MR.science.V. جميع الحقوق محفوظة.</p>
         <p>ROLE-BASED COMMUNITY &amp; SCIENTIFIC MANAGEMENT SYSTEM</p>
       </div>
     </div>
@@ -874,8 +894,8 @@
 
     const TRANSLATIONS = {
       ar: {
-        brandName: 'ساينس هورايزون',
-        brandSub: 'مجتمع ونقاش علمي',
+        brandName: 'MR.science.V',
+        brandSub: 'MR.science.V Community',
         navHome: 'الرئيسية',
         navForum: 'ساحة النقاش',
         navVideos: 'الفيديوهات',
@@ -996,8 +1016,8 @@
         deletePostBtn: 'حذف المنشور (إداري)',
       },
       en: {
-        brandName: 'Science Horizon',
-        brandSub: 'SCIENCE COMMUNITY',
+        brandName: 'MR.science.V',
+        brandSub: 'MR.science.V Community',
         navHome: 'Home',
         navForum: 'Community Forum',
         navVideos: 'Videos',
@@ -1041,11 +1061,11 @@
         formTagsLabel: 'Keywords (Optional, comma-separated)',
         btnCancel: 'Cancel',
         btnPublish: 'Publish to Community',
-        footerMission: 'A scientific discussion platform and companion to our YouTube channel dedicated to empirical evidence, astrophysics, biology, medicine, and philosophy.',
+        footerMission: 'A scientific discussion platform and companion to MR.science.V YouTube channel dedicated to empirical evidence, astrophysics, biology, medicine, and philosophy.',
         footerNavTitle: 'Navigation',
         footerRulesTitle: 'Community Charter',
         footerRulesDesc: 'All discussions adhere to scientific integrity and mutual respect, with strict priority given to empirical evidence and sound logic.',
-        footerCopyright: '© 2026 Science Horizon Media. All rights reserved.',
+        footerCopyright: '© 2026 MR.science.V. All rights reserved.',
         btnReply: 'Reply / Discuss',
         repliesTitle: 'Replies & Discussion',
         replyPlaceholder: 'Write your scientific reply or counter-evidence here...',
