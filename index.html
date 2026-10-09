@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="scroll-smooth">
+<html lang="ar" dir="rtl" class="scroll-smooth overflow-x-hidden w-full">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Science Horizon – منصة المجتمع والنقاش العلمي ونظام الإدارة</title>
   <meta name="description" content="منصة المجتمع والنقاش العلمي التفاعلية لقناة ساينس هورايزون مع نظام إدارة الصلاحيات والأعضاء والمحتوى المرئي." />
 
-  <!-- Google Fonts: Cairo & Plus Jakarta Sans & JetBrains Mono -->
+  <!-- Google Fonts: Cairo (Arabic) & Plus Jakarta Sans (English) & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -19,8 +19,14 @@
       theme: {
         extend: {
           colors: {
-            slate: { 850: '#0f172a', 900: '#0b1120', 950: '#030712' },
-            cyan: { 450: '#00d4ff' }
+            slate: {
+              850: '#0f172a',
+              900: '#0b1120',
+              950: '#030712',
+            },
+            cyan: {
+              450: '#00d4ff',
+            }
           },
           fontFamily: {
             sans: ['Cairo', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
@@ -40,8 +46,12 @@
       --font-arabic: 'Cairo', system-ui, sans-serif;
       --font-english: 'Plus Jakarta Sans', system-ui, sans-serif;
     }
-    html[dir="rtl"] body { font-family: var(--font-arabic); }
-    html[dir="ltr"] body { font-family: var(--font-english); }
+    html[dir="rtl"] body {
+      font-family: var(--font-arabic);
+    }
+    html[dir="ltr"] body {
+      font-family: var(--font-english);
+    }
     .cosmic-grid {
       background-image: 
         radial-gradient(rgba(56, 189, 248, 0.08) 1px, transparent 1px),
@@ -61,21 +71,29 @@
       -webkit-backdrop-filter: blur(8px);
       border: 1px solid rgba(51, 65, 85, 0.5);
     }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    .badge-glow { box-shadow: 0 0 12px rgba(6, 182, 212, 0.35); }
+    /* Hide scrollbars */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .badge-glow {
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.35);
+    }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 min-h-screen flex flex-col">
+<body class="bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 min-h-screen flex flex-col overflow-x-hidden w-full">
 
-  <!-- TOAST NOTIFICATION CONTAINER -->
+  <!-- ================= TOAST NOTIFICATION CONTAINER ================= -->
   <div id="toastContainer" class="fixed top-20 start-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none transition-all"></div>
 
-  <!-- NAVBAR -->
+  <!-- ================= NAVBAR ================= -->
   <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
       
-      <!-- Logo -->
+      <!-- Brand Logo -->
       <a href="#hero" class="flex items-center gap-3 group focus:outline-none shrink-0">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
           <i data-lucide="atom" class="w-6 h-6"></i>
@@ -90,7 +108,7 @@
         </div>
       </a>
 
-      <!-- Desktop Links -->
+      <!-- Desktop Navigation Links -->
       <nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
         <a href="#hero" class="text-slate-300 hover:text-cyan-400 transition-colors" data-i18n="navHome">الرئيسية</a>
         <a href="#forum" class="text-slate-300 hover:text-cyan-400 transition-colors flex items-center gap-1.5">
@@ -102,34 +120,44 @@
         <a href="#quiz" class="text-slate-300 hover:text-cyan-400 transition-colors" data-i18n="navQuiz">اختبر معلوماتك</a>
       </nav>
 
-      <!-- Profile & Actions -->
+      <!-- User Profile / Auth / Admin Dashboard / Language -->
       <div class="flex items-center gap-2 sm:gap-3">
+        
+        <!-- Admin Dashboard Button (Only visible for Admin/Developer) -->
         <button id="adminNavBtn" onclick="openAdminModal()" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-xl border border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-300 hover:text-white text-xs font-bold transition-all badge-glow min-h-[40px]">
           <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
           <span data-i18n="navAdminBtn">لوحة الإدارة</span>
         </button>
 
-        <div id="userNavSlot" class="flex items-center gap-2"></div>
+        <!-- User Profile Slot (Dynamic via JS) -->
+        <div id="userNavSlot" class="flex items-center gap-2">
+          <!-- Populated by JS: Login Button or User Avatar Badge + Logout -->
+        </div>
 
+        <!-- Language Switcher Button -->
         <button id="langToggleBtn" onclick="toggleLanguage()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-xs font-bold text-slate-200 transition-all hover:text-cyan-300 shadow-sm min-h-[40px]" title="تبديل اللغة / Switch Language">
           <i data-lucide="globe" class="w-4 h-4 text-cyan-400"></i>
           <span id="langBtnText" class="font-mono text-xs">EN</span>
         </button>
 
+        <!-- YouTube Channel Button -->
         <a href="https://youtube.com/@ScienceHorizon" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-500 rounded-xl shadow-md shadow-red-600/30 transition-all hover:scale-105 min-h-[40px]">
           <i data-lucide="youtube" class="w-4 h-4"></i>
           <span class="hidden xl:inline" data-i18n="btnSubscribe">قناة اليوتيوب</span>
         </a>
 
+        <!-- Mobile Menu Toggle -->
         <button onclick="toggleMobileMenu()" class="lg:hidden flex items-center justify-center p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors min-w-[40px] min-h-[40px]">
           <i data-lucide="menu" id="menuIcon" class="w-6 h-6"></i>
         </button>
       </div>
     </div>
 
-    <!-- Mobile Drawer -->
+    <!-- Mobile Drawer Menu -->
     <div id="mobileMenu" class="hidden lg:hidden border-b border-slate-800 bg-slate-950/98 px-4 pt-3 pb-6 space-y-2">
-      <div id="mobileUserBanner" class="p-3 mb-2 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between"></div>
+      <div id="mobileUserBanner" class="p-3 mb-2 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+        <!-- Rendered by JS -->
+      </div>
       <a href="#hero" onclick="closeMobileMenu()" class="block py-2.5 px-3 rounded-lg text-slate-200 hover:bg-slate-900 font-medium" data-i18n="navHome">الرئيسية</a>
       <a href="#forum" onclick="closeMobileMenu()" class="block py-2.5 px-3 rounded-lg text-cyan-400 hover:bg-slate-900 font-bold" data-i18n="navForum">ساحة النقاش العلمي</a>
       <a href="#videos" onclick="closeMobileMenu()" class="block py-2.5 px-3 rounded-lg text-slate-200 hover:bg-slate-900 font-medium" data-i18n="navVideos">الفيديوهات</a>
@@ -152,16 +180,18 @@
     </div>
   </header>
 
-  <!-- HERO -->
-  <section id="hero" class="relative pt-12 pb-16 md:pt-20 md:pb-24 px-4 overflow-hidden border-b border-slate-900 cosmic-grid">
+  <!-- ================= HERO SECTION ================= -->
+  <section id="hero" class="relative pt-8 pb-10 sm:pt-12 sm:pb-14 md:pt-16 md:pb-16 px-4 overflow-hidden border-b border-slate-900 cosmic-grid">
     <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-gradient-to-tr from-cyan-600/15 via-blue-600/10 to-transparent blur-3xl -z-10 pointer-events-none"></div>
 
-    <div class="max-w-4xl mx-auto text-center space-y-6">
+    <div class="max-w-4xl mx-auto text-center space-y-4 sm:space-y-6">
+      <!-- Role status badge banner -->
       <div id="heroRoleBadge" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-950/40 text-cyan-300 text-xs font-mono uppercase tracking-widest">
         <i data-lucide="sparkles" class="w-4 h-4 text-cyan-400"></i>
         <span data-i18n="heroBadge">مجتمع النقاش والبحث العلمي التفاعلي</span>
       </div>
 
+      <!-- Main Headline -->
       <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight" data-i18n="heroTitle">
         اكتشف العلم وراء كل شيء
       </h1>
@@ -170,6 +200,7 @@
         المنصة العلمية التفاعلية المرافقة لقناتنا على يوتيوب. شارك في النقاشات الفلسفية والطبية والبيولوجية، واطرح تساؤلاتك العلمية لتناقشها مع مجتمع من الباحثين والمفكرين.
       </p>
 
+      <!-- CTAs -->
       <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5">
         <a href="#forum" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm shadow-lg shadow-cyan-500/25 transition-all hover:scale-105 min-h-[48px]">
           <i data-lucide="message-square" class="w-5 h-5"></i>
@@ -189,12 +220,14 @@
     </div>
   </section>
 
-  <!-- MAIN CONTAINER -->
-  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-24 w-full">
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-10 md:space-y-16 w-full">
 
-    <!-- 1. FORUM -->
-    <section id="forum" class="space-y-8 scroll-mt-20">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-6">
+    <!-- ================= 1. FORUM / COMMUNITY HUB ================= -->
+    <section id="forum" class="space-y-6 sm:space-y-8 scroll-mt-20">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-4 border-b border-slate-800 pb-4 sm:pb-6">
         <div>
           <div class="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-2">
             <i data-lucide="messages-square" class="w-4 h-4"></i>
@@ -208,14 +241,18 @@
           </p>
         </div>
 
+        <!-- Add Post Trigger Button -->
         <button onclick="handleNewPostButtonClick()" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-xs sm:text-sm shadow-md shadow-cyan-500/20 transition-all hover:scale-102 min-h-[44px]">
           <i data-lucide="plus-circle" class="w-4 h-4 text-slate-950"></i>
           <span data-i18n="btnNewPost">طرح تساؤل / منشور جديد</span>
         </button>
       </div>
 
+      <!-- Categories & Filters Tabs -->
       <div class="space-y-4">
+        <!-- 4 Distinct Domains -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <!-- 1. Biology -->
           <button onclick="setCategoryFilter('biology')" id="catCard-biology" class="category-card p-4 rounded-2xl glass-card border border-slate-800 text-start hover:border-emerald-500/50 transition-all duration-200 group">
             <div class="flex items-center justify-between mb-2">
               <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
@@ -227,6 +264,7 @@
             <p class="text-[11px] text-slate-400 mt-1 line-clamp-2" data-i18n="catBiologyDesc">علم الوراثة، التطور، الخلية، والتنوع الحيوي</p>
           </button>
 
+          <!-- 2. Medicine & Health -->
           <button onclick="setCategoryFilter('medicine')" id="catCard-medicine" class="category-card p-4 rounded-2xl glass-card border border-slate-800 text-start hover:border-cyan-500/50 transition-all duration-200 group">
             <div class="flex items-center justify-between mb-2">
               <div class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/20">
@@ -238,6 +276,7 @@
             <p class="text-[11px] text-slate-400 mt-1 line-clamp-2" data-i18n="catMedicineDesc">الفيزيولوجيا، المناعة، الأدوية، والأبحاث الطبية</p>
           </button>
 
+          <!-- 3. Religion & Philosophy -->
           <button onclick="setCategoryFilter('philosophy')" id="catCard-philosophy" class="category-card p-4 rounded-2xl glass-card border border-slate-800 text-start hover:border-purple-500/50 transition-all duration-200 group">
             <div class="flex items-center justify-between mb-2">
               <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center border border-purple-500/20">
@@ -249,6 +288,7 @@
             <p class="text-[11px] text-slate-400 mt-1 line-clamp-2" data-i18n="catPhilosophyDesc">فلسفة العلم، الوعي، الضبط الدقيق، والميتافيزيقا</p>
           </button>
 
+          <!-- 4. History of Science -->
           <button onclick="setCategoryFilter('history')" id="catCard-history" class="category-card p-4 rounded-2xl glass-card border border-slate-800 text-start hover:border-amber-500/50 transition-all duration-200 group">
             <div class="flex items-center justify-between mb-2">
               <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center border border-amber-500/20">
@@ -261,7 +301,9 @@
           </button>
         </div>
 
+        <!-- Filter Bar & Search Input -->
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
+          <!-- Filter Tabs -->
           <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
             <button onclick="setCategoryFilter('all')" id="tab-all" class="filter-tab px-4 py-2 rounded-xl font-bold transition-colors whitespace-nowrap bg-cyan-500 text-slate-950">
               <span data-i18n="filterAll">كافة الأقسام</span> (<span id="count-all">0</span>)
@@ -280,6 +322,7 @@
             </button>
           </div>
 
+          <!-- Search Forum Bar -->
           <div class="relative w-full sm:w-72">
             <div class="absolute inset-y-0 start-0 ps-3 flex items-center pointer-events-none text-slate-500">
               <i data-lucide="search" class="w-4 h-4"></i>
@@ -289,10 +332,13 @@
         </div>
       </div>
 
-      <div id="postsContainer" class="space-y-4"></div>
+      <!-- Discussions Feed Container -->
+      <div id="postsContainer" class="space-y-4">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
     </section>
 
-    <!-- 2. VIDEOS -->
+    <!-- ================= 2. VIDEOS SECTION ================= -->
     <section id="videos" class="space-y-6 scroll-mt-20">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
         <div>
@@ -311,10 +357,13 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="videoGrid"></div>
+      <!-- Video Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="videoGrid">
+        <!-- Rendered dynamically from localStorage & defaults -->
+      </div>
     </section>
 
-    <!-- 3. DAILY FACT -->
+    <!-- ================= 3. DAILY FACT CARD ================= -->
     <section id="fact" class="scroll-mt-20">
       <div class="rounded-3xl border border-cyan-500/30 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-cyan-950/20 p-6 sm:p-8 backdrop-blur-sm relative overflow-hidden">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
@@ -354,7 +403,7 @@
       </div>
     </section>
 
-    <!-- 4. QUIZ -->
+    <!-- ================= 4. INTERACTIVE QUIZ ================= -->
     <section id="quiz" class="space-y-6 scroll-mt-20">
       <div class="border-b border-slate-800 pb-4">
         <div class="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-cyan-400 mb-1">
@@ -364,7 +413,9 @@
         <h2 class="text-2xl sm:text-3xl font-black text-white" data-i18n="quizTitle">اختبر معلوماتك العلمية</h2>
       </div>
 
+      <!-- Quiz Interactive Card -->
       <div id="quizContainer" class="rounded-3xl glass-card border border-slate-800 p-6 sm:p-8 space-y-6">
+        <!-- Live Progress & Score -->
         <div class="flex items-center justify-between text-xs font-mono text-slate-400">
           <span class="flex items-center gap-1.5">
             <span class="text-cyan-400 font-bold" data-i18n="quizQuestionLabel">السؤال</span>
@@ -377,10 +428,12 @@
           </span>
         </div>
 
+        <!-- Progress bar -->
         <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
           <div id="quizProgressBar" class="h-full bg-cyan-400 transition-all duration-300 w-1/4"></div>
         </div>
 
+        <!-- Question Prompt -->
         <div class="space-y-2">
           <span id="quizCategoryBadge" class="text-[11px] font-mono text-cyan-400 uppercase font-bold tracking-wider">العلوم البيولوجية</span>
           <h3 id="quizQuestionText" class="text-base sm:text-xl font-bold text-white leading-snug">
@@ -388,13 +441,18 @@
           </h3>
         </div>
 
-        <div id="quizOptionsContainer" class="space-y-3"></div>
+        <!-- Options Buttons -->
+        <div id="quizOptionsContainer" class="space-y-3">
+          <!-- Rendered dynamically -->
+        </div>
 
+        <!-- Feedback & Explanation Box -->
         <div id="quizFeedbackBox" class="hidden p-4 rounded-2xl border text-xs sm:text-sm space-y-2 transition-all">
           <div id="quizFeedbackTitle" class="font-bold flex items-center gap-2"></div>
           <p id="quizFeedbackExplanation" class="text-slate-300 leading-relaxed"></p>
         </div>
 
+        <!-- Next / Restart Button -->
         <div class="flex justify-end pt-2">
           <button id="quizNextBtn" onclick="handleQuizNext()" class="hidden px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs sm:text-sm transition-all flex items-center gap-2">
             <span id="quizNextText">السؤال التالي</span>
@@ -406,9 +464,11 @@
 
   </main>
 
-  <!-- AUTH MODAL -->
+  <!-- ================= AUTH MODAL (SOCIAL LOGIN & AUTH GUARD) ================= -->
   <div id="authModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md p-4 overflow-y-auto flex items-center justify-center">
-    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-5 shadow-2xl relative">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-7 space-y-4 sm:space-y-5 shadow-2xl relative">
+      
+      <!-- Modal Header -->
       <div class="flex items-center justify-between border-b border-slate-800 pb-4">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 text-cyan-400 flex items-center justify-center border border-cyan-500/30 shadow-sm">
@@ -424,6 +484,7 @@
         </button>
       </div>
 
+      <!-- Auth Guard Notice Banner (Shown dynamically when guest clicks an interactive button) -->
       <div id="authGuardBanner" class="p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/40 text-amber-200 text-xs flex items-start gap-2.5 shadow-sm">
         <i data-lucide="lock" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
         <div class="space-y-0.5">
@@ -432,8 +493,11 @@
         </div>
       </div>
 
+      <!-- Primary: Official Social Login Buttons -->
       <div class="space-y-3 pt-1">
+        <!-- 1. Google Button -->
         <button onclick="handleSocialLogin('google')" class="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-3 transition-all hover:scale-[1.01] active:scale-[0.99] border border-slate-200 group">
+          <!-- Official Multi-colored Google G Icon -->
           <svg class="w-5 h-5 group-hover:scale-105 transition-transform" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -443,7 +507,9 @@
           <span data-i18n="loginWithGoogle">المتابعة باستخدام Google</span>
         </button>
 
+        <!-- 2. Facebook Button -->
         <button onclick="handleSocialLogin('facebook')" class="w-full py-3.5 px-4 rounded-2xl bg-[#1877F2] hover:bg-[#166fe5] active:bg-[#125ec2] text-white font-bold text-xs sm:text-sm shadow-md shadow-[#1877F2]/25 flex items-center justify-center gap-3 transition-all hover:scale-[1.01] active:scale-[0.99] group">
+          <!-- Official Facebook SVG Icon -->
           <svg class="w-5 h-5 fill-white group-hover:scale-105 transition-transform" viewBox="0 0 24 24">
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
           </svg>
@@ -451,12 +517,14 @@
         </button>
       </div>
 
+      <!-- Divider -->
       <div class="relative flex items-center py-1">
         <div class="flex-grow border-t border-slate-800"></div>
         <span class="flex-shrink mx-3 text-[10px] font-mono text-slate-500 uppercase tracking-wider" data-i18n="orDivider">أو خيارات الإشراف والتطوير</span>
         <div class="flex-grow border-t border-slate-800"></div>
       </div>
 
+      <!-- Quick Developer & Admin Access Section -->
       <div class="space-y-2.5">
         <button onclick="handleQuickAdminLogin()" class="w-full py-3 px-4 rounded-2xl border border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-300 hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition-all badge-glow group">
           <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform"></i>
@@ -471,12 +539,15 @@
         </div>
       </div>
 
+      <!-- Collapsible Email/Password Form (For manual admin or regular member signup) -->
       <div id="emailCredentialsContainer" class="hidden pt-3 border-t border-slate-800 space-y-4">
+        <!-- Auth Tabs: Login vs Register -->
         <div class="flex p-1 bg-slate-950 rounded-xl border border-slate-800 text-xs font-bold">
           <button onclick="switchAuthTab('login')" id="authTabLogin" class="flex-1 py-1.5 rounded-lg bg-cyan-500 text-slate-950 transition-all" data-i18n="tabLogin">تسجيل الدخول</button>
           <button onclick="switchAuthTab('register')" id="authTabRegister" class="flex-1 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all" data-i18n="tabRegister">إنشاء حساب جديد</button>
         </div>
 
+        <!-- Quick Demo Credentials Callout -->
         <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-[11px] text-slate-400 space-y-1">
           <p class="font-bold flex items-center gap-1 text-cyan-300">
             <i data-lucide="info" class="w-3.5 h-3.5 text-cyan-400"></i>
@@ -485,6 +556,7 @@
           <p class="font-mono text-slate-300 text-[10px]">البريد: <span class="text-cyan-300 font-bold">admin@science.com</span> | كلمة المرور: <span class="text-cyan-300 font-bold">admin123</span></p>
         </div>
 
+        <!-- Login Form -->
         <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-3">
           <div>
             <label class="block text-[11px] font-bold text-slate-300 mb-1" data-i18n="formEmail">البريد الإلكتروني</label>
@@ -494,9 +566,12 @@
             <label class="block text-[11px] font-bold text-slate-300 mb-1" data-i18n="formPassword">كلمة المرور</label>
             <input type="password" id="loginPassword" required value="admin123" placeholder="••••••••" class="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs focus:outline-none focus:ring-1 focus:ring-cyan-400 font-mono">
           </div>
-          <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs shadow-md transition-all" data-i18n="btnLoginAction">دخول</button>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs shadow-md transition-all" data-i18n="btnLoginAction">
+            دخول
+          </button>
         </form>
 
+        <!-- Register Form -->
         <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="space-y-3 hidden">
           <div>
             <label class="block text-[11px] font-bold text-slate-300 mb-1" data-i18n="formFullName">الاسم الكامل / المعرّف الأكاديمي</label>
@@ -510,15 +585,20 @@
             <label class="block text-[11px] font-bold text-slate-300 mb-1" data-i18n="formPassword">كلمة المرور</label>
             <input type="password" id="regPassword" required placeholder="••••••••" class="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs focus:outline-none focus:ring-1 focus:ring-cyan-400 font-mono">
           </div>
-          <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs shadow-md transition-all" data-i18n="btnRegisterAction">إنشاء حساب عضو جديد</button>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs shadow-md transition-all" data-i18n="btnRegisterAction">
+            إنشاء حساب عضو جديد
+          </button>
         </form>
       </div>
+
     </div>
   </div>
 
-  <!-- ADMIN DASHBOARD MODAL -->
+  <!-- ================= ADMIN DASHBOARD MODAL ================= -->
   <div id="adminModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md p-4 overflow-y-auto flex items-center justify-center">
     <div class="w-full max-w-4xl bg-slate-900 border border-cyan-500/30 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] flex flex-col">
+      
+      <!-- Admin Header -->
       <div class="flex items-center justify-between border-b border-slate-800 pb-4 shrink-0">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 flex items-center justify-center font-bold shadow-md">
@@ -537,6 +617,7 @@
         </button>
       </div>
 
+      <!-- Dashboard Navigation Tabs -->
       <div class="flex border-b border-slate-800 text-xs font-bold gap-2 overflow-x-auto no-scrollbar shrink-0">
         <button onclick="switchAdminTab('videos')" id="adminTab-videos" class="admin-tab-btn py-2.5 px-4 border-b-2 border-cyan-400 text-cyan-400 transition-colors whitespace-nowrap flex items-center gap-1.5">
           <i data-lucide="video" class="w-4 h-4"></i>
@@ -552,7 +633,9 @@
         </button>
       </div>
 
+      <!-- Tab 1: Video Management -->
       <div id="adminPanelVideos" class="space-y-6 overflow-y-auto flex-1 pr-1">
+        <!-- Add Video Form -->
         <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-4">
           <h4 class="text-sm font-bold text-white flex items-center gap-2">
             <i data-lucide="plus-circle" class="w-4 h-4 text-cyan-400"></i>
@@ -587,12 +670,16 @@
           </form>
         </div>
 
+        <!-- Current Videos List with Delete option -->
         <div class="space-y-3">
           <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400" data-i18n="lblCurrentVideos">الفيديوهات الحالية على الموقع</h4>
-          <div id="adminVideosList" class="space-y-2"></div>
+          <div id="adminVideosList" class="space-y-2">
+            <!-- Rendered by JS -->
+          </div>
         </div>
       </div>
 
+      <!-- Tab 2: User Moderation & Ban Management -->
       <div id="adminPanelUsers" class="space-y-4 overflow-y-auto flex-1 pr-1 hidden">
         <div class="p-4 rounded-2xl bg-slate-950/80 border border-slate-800">
           <h4 class="text-sm font-bold text-white mb-2" data-i18n="lblMembersOverview">إدارة سجل الأعضاء وحالة الحسابات</h4>
@@ -608,12 +695,15 @@
                   <th class="p-2.5 text-end" data-i18n="thAction">الإجراء</th>
                 </tr>
               </thead>
-              <tbody id="adminUsersTableBody" class="divide-y divide-slate-800/80"></tbody>
+              <tbody id="adminUsersTableBody" class="divide-y divide-slate-800/80">
+                <!-- Rendered by JS -->
+              </tbody>
             </table>
           </div>
         </div>
       </div>
 
+      <!-- Tab 3: Daily Fact & Content Management -->
       <div id="adminPanelContent" class="space-y-6 overflow-y-auto flex-1 pr-1 hidden">
         <form id="adminUpdateFactForm" onsubmit="handleAdminUpdateFact(event)" class="p-4 sm:p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3 text-xs">
           <h4 class="text-sm font-bold text-white flex items-center gap-2">
@@ -639,12 +729,15 @@
           </div>
         </form>
       </div>
+
     </div>
   </div>
 
-  <!-- NEW POST MODAL -->
+  <!-- ================= NEW POST MODAL ================= -->
   <div id="newPostModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm p-4 overflow-y-auto flex items-center justify-center">
-    <div class="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
+    <div class="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-7 space-y-4 sm:space-y-5 shadow-2xl relative">
+      
+      <!-- Modal Header -->
       <div class="flex items-center justify-between border-b border-slate-800 pb-4">
         <div class="flex items-center gap-2.5">
           <div class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/20">
@@ -660,11 +753,15 @@
         </button>
       </div>
 
+      <!-- Form -->
       <form id="newPostForm" onsubmit="handleCreatePost(event)" class="space-y-4">
+        <!-- Author Name (auto-filled if logged in) -->
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1.5" data-i18n="formAuthorLabel">اسم الكاتب أو المعرّف *</label>
           <input type="text" id="postAuthor" required placeholder="مثال: د. أحمد الباحث / الباحثة سارة" class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-slate-600">
         </div>
+
+        <!-- Category Select (4 Specific Domains) -->
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1.5" data-i18n="formCategoryLabel">المجال العلمي والتخصص *</label>
           <select id="postCategory" required class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
@@ -674,18 +771,26 @@
             <option value="history" data-i18n="catHistory">التاريخ وتاريخ العلوم (History of Science)</option>
           </select>
         </div>
+
+        <!-- Post Title -->
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1.5" data-i18n="formTitleLabel">عنوان التساؤل أو الأطروحة *</label>
           <input type="text" id="postTitle" required placeholder="عنوان مركز ومحدد يلخص الفكرة العلمية" class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-slate-600">
         </div>
+
+        <!-- Content -->
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1.5" data-i18n="formContentLabel">المحتوى والتفاصيل العلمية *</label>
           <textarea id="postContent" required rows="5" placeholder="اشرح تساؤلك بالتفصيل، اذكر الأدلة أو الملاحظات التي تود مناقشتها..." class="w-full px-4 py-3 rounded-xl border border-slate-800 bg-slate-950 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-slate-600 leading-relaxed"></textarea>
         </div>
+
+        <!-- Tags / Keywords -->
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1.5" data-i18n="formTagsLabel">الكلمات المفتاحية (اختياري، مفصولة بفواصل)</label>
           <input type="text" id="postTags" placeholder="مثال: DNA, مناعة, كوانتم, ابن الهيثم" class="w-full px-4 py-2 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs focus:outline-none focus:ring-2 focus:ring-cyan-400 placeholder-slate-600">
         </div>
+
+        <!-- Form Submit & Cancel -->
         <div class="pt-3 border-t border-slate-800 flex items-center justify-end gap-3">
           <button type="button" onclick="closeNewPostModal()" class="px-4 py-2.5 rounded-xl border border-slate-800 hover:bg-slate-800 text-xs text-slate-300 font-bold" data-i18n="btnCancel">إلغاء</button>
           <button type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all" data-i18n="btnPublish">نشر في المجتمع</button>
@@ -694,10 +799,12 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
+  <!-- ================= FOOTER ================= -->
   <footer class="border-t border-slate-800/80 bg-slate-950 pt-12 pb-12 text-slate-400">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        
+        <!-- Brand Info -->
         <div class="md:col-span-2 space-y-3">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center">
@@ -721,6 +828,7 @@
           </div>
         </div>
 
+        <!-- Quick Links -->
         <div>
           <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-200 mb-3" data-i18n="footerNavTitle">أقسام المنصة</h4>
           <ul class="space-y-2 text-xs">
@@ -731,6 +839,7 @@
           </ul>
         </div>
 
+        <!-- Community Rules -->
         <div>
           <h4 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-200 mb-3" data-i18n="footerRulesTitle">ميثاق المجتمع</h4>
           <p class="text-xs text-slate-400 leading-relaxed" data-i18n="footerRulesDesc">
@@ -746,16 +855,22 @@
     </div>
   </footer>
 
-  <!-- ================= JAVASCRIPT ================= -->
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    // Safe Lucide helper to prevent blank screen errors
+    // Safe icon rendering function to prevent white screen crashes
     function safeRenderIcons() {
       if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
         lucide.createIcons();
       }
     }
 
-    let currentLang = localStorage.getItem('sh_lang') || 'ar';
+    // ---------- BILINGUAL DICTIONARY ----------
+    let currentLang = 'ar';
+    try {
+      currentLang = localStorage.getItem('sh_lang') || 'ar';
+    } catch(e) {
+      currentLang = 'ar';
+    }
 
     const TRANSLATIONS = {
       ar: {
@@ -812,6 +927,7 @@
         btnReply: 'إضافة رد / مناقشة',
         repliesTitle: 'الردود والمناقشات',
         replyPlaceholder: 'اكتب ردك أو دليلك العلمي هنا...',
+        authorPlaceholder: 'اسمك...',
         btnSendReply: 'إرسال الرد',
         noRepliesYet: 'لا توجد ردود حتى الآن. كن أول من يناقش هذا المنشور!',
         emptyPosts: 'لا توجد منشورات في هذا التخصص حالياً. بادر بطرح أول تساؤل علمي!',
@@ -933,6 +1049,7 @@
         btnReply: 'Reply / Discuss',
         repliesTitle: 'Replies & Discussion',
         replyPlaceholder: 'Write your scientific reply or counter-evidence here...',
+        authorPlaceholder: 'Your name...',
         btnSendReply: 'Post Reply',
         noRepliesYet: 'No replies yet. Be the first to start this scientific discussion!',
         emptyPosts: 'No posts in this category yet. Be the first to ask a scientific question!',
@@ -1002,9 +1119,11 @@
       }
     };
 
+    // ---------- TOAST SYSTEM ----------
     function showToast(message, type = 'info') {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
+      
       let borderCol = 'border-cyan-500/50 bg-slate-900/95 text-cyan-200';
       if (type === 'error') borderCol = 'border-rose-500/50 bg-slate-900/95 text-rose-200';
       if (type === 'success') borderCol = 'border-emerald-500/50 bg-slate-900/95 text-emerald-200';
@@ -1020,6 +1139,7 @@
       }, 3500);
     }
 
+    // ---------- 1. USER AUTH & RBAC SYSTEM ----------
     const DEFAULT_ADMIN = {
       id: 'user-admin-1',
       name: 'د. عاصم المطور / Dr. Asem',
@@ -1085,7 +1205,9 @@
         showToast(currentLang === 'ar' ? 'هذا الحساب محظور من التفاعل والمشاركة!' : 'This account is banned from interactions!', 'error');
         return false;
       }
-      if (typeof actionCallback === 'function') actionCallback();
+      if (typeof actionCallback === 'function') {
+        actionCallback();
+      }
       return true;
     }
 
@@ -1095,9 +1217,12 @@
       const mobileAdminLink = document.getElementById('mobileAdminLinkContainer');
       const mobileUserBanner = document.getElementById('mobileUserBanner');
       const heroRoleBadge = document.getElementById('heroRoleBadge');
+      const isRtl = currentLang === 'ar';
 
       if (currentUser) {
         const isAdmin = currentUser.role === 'admin';
+
+        // Show / Hide admin dashboard button
         if (isAdmin) {
           adminBtn.classList.remove('hidden');
           adminBtn.classList.add('flex');
@@ -1108,14 +1233,18 @@
           mobileAdminLink.classList.add('hidden');
         }
 
+        // Mini provider icon badge on avatar corner
         let providerBadgeIcon = '';
         if (currentUser.provider === 'google') {
           providerBadgeIcon = `<span class="absolute -bottom-1 -end-1 w-4 h-4 rounded-full bg-white flex items-center justify-center shadow border border-slate-200"><svg class="w-2.5 h-2.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg></span>`;
         } else if (currentUser.provider === 'facebook') {
           providerBadgeIcon = `<span class="absolute -bottom-1 -end-1 w-4 h-4 rounded-full bg-[#1877F2] flex items-center justify-center shadow"><svg class="w-2.5 h-2.5 fill-white" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></span>`;
+        } else if (isAdmin) {
+          providerBadgeIcon = `<span class="absolute -bottom-1 -end-1 w-4 h-4 rounded-full bg-cyan-500 text-slate-950 flex items-center justify-center font-bold text-[8px]"><i data-lucide="shield" class="w-2.5 h-2.5"></i></span>`;
         }
 
         const avatarImg = currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=0284c7&color=fff&bold=true`;
+
         const badgeHtml = isAdmin 
           ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 badge-glow">${TRANSLATIONS[currentLang].badgeAdmin}</span>`
           : `<span class="px-2 py-0.5 rounded-full text-[10px] font-mono text-emerald-300 bg-emerald-950/50 border border-emerald-500/30 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>${TRANSLATIONS[currentLang].badgeMember}</span>`;
@@ -1155,6 +1284,7 @@
           </button>
         `;
 
+        // Update Hero Badge for logged in member
         if (heroRoleBadge) {
           heroRoleBadge.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-950/50 text-cyan-300 text-xs font-mono tracking-wide shadow-sm";
           heroRoleBadge.onclick = null;
@@ -1163,7 +1293,9 @@
             <span>${TRANSLATIONS[currentLang].loggedInBadge} (${currentUser.name})</span>
           `;
         }
+
       } else {
+        // Guest user (Preview Mode)
         adminBtn.classList.add('hidden');
         adminBtn.classList.remove('flex');
         mobileAdminLink.classList.add('hidden');
@@ -1190,6 +1322,7 @@
           </button>
         `;
 
+        // Update Hero Badge for Guest Preview Mode
         if (heroRoleBadge) {
           heroRoleBadge.className = "inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-500/40 bg-amber-950/40 text-amber-300 text-xs font-mono tracking-wide cursor-pointer hover:bg-amber-900/50 transition-all shadow-sm";
           heroRoleBadge.onclick = () => openAuthModal('social');
@@ -1204,21 +1337,34 @@
       safeRenderIcons();
     }
 
+    // Modal controls for Auth & Social Login
     function openAuthModal(tab = 'social', reason = null) {
       const banner = document.getElementById('authGuardBanner');
       const bannerText = document.getElementById('authGuardBannerText');
 
       if (banner && bannerText) {
-        if (reason === 'post') bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticePost;
-        else if (reason === 'like') bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeLike;
-        else if (reason === 'reply') bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeReply;
-        else if (reason === 'quiz' || reason === 'quiz_save') bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeQuiz;
-        else bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeDefault;
-        banner.classList.remove('hidden');
+        if (reason === 'post') {
+          bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticePost;
+          banner.classList.remove('hidden');
+        } else if (reason === 'like') {
+          bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeLike;
+          banner.classList.remove('hidden');
+        } else if (reason === 'reply') {
+          bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeReply;
+          banner.classList.remove('hidden');
+        } else if (reason === 'quiz' || reason === 'quiz_save') {
+          bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeQuiz;
+          banner.classList.remove('hidden');
+        } else {
+          bannerText.textContent = TRANSLATIONS[currentLang].authGuardNoticeDefault;
+          banner.classList.remove('hidden');
+        }
       }
 
+      // Hide email credentials box by default
       const emailBox = document.getElementById('emailCredentialsContainer');
       if (emailBox) emailBox.classList.add('hidden');
+
       document.getElementById('authModal').classList.remove('hidden');
       safeRenderIcons();
     }
@@ -1254,9 +1400,10 @@
       }
     }
 
+    // 1-Click Social Sign-In (Google & Facebook)
     function handleSocialLogin(provider) {
-      const isAr = currentLang === 'ar';
       let user;
+      const isAr = currentLang === 'ar';
 
       if (provider === 'google') {
         user = {
@@ -1282,6 +1429,7 @@
         };
       }
 
+      // Add to users list if not exists
       if (!usersList.some(u => u.email === user.email)) {
         usersList.push(user);
         saveUsers();
@@ -1290,8 +1438,14 @@
       setCurrentUser(user);
       closeAuthModal();
 
-      showToast(isAr ? `مرحباً بك! تم الدخول بحساب ${provider}.` : `Welcome! Signed in via ${provider}.`, 'success');
+      showToast(
+        isAr 
+          ? `مرحباً بك! تم تسجيل الدخول بنجاح بحساب ${provider === 'google' ? 'Google' : 'Facebook'}.` 
+          : `Welcome! Successfully signed in via ${provider === 'google' ? 'Google' : 'Facebook'}.`, 
+        'success'
+      );
 
+      // Execute pending action if user clicked an interactive button before logging in
       if (typeof pendingAuthAction === 'function') {
         const action = pendingAuthAction;
         pendingAuthAction = null;
@@ -1299,6 +1453,7 @@
       }
     }
 
+    // Quick Admin / Developer 1-Click Sign-In
     function handleQuickAdminLogin() {
       const adminUser = usersList.find(u => u.email === DEFAULT_ADMIN.email) || DEFAULT_ADMIN;
       adminUser.avatar = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80';
@@ -1306,7 +1461,13 @@
 
       setCurrentUser(adminUser);
       closeAuthModal();
-      showToast(currentLang === 'ar' ? 'تم تسجيل الدخول بصلاحية المشرف والمطور!' : 'Signed in as Admin & Developer!', 'success');
+
+      showToast(
+        currentLang === 'ar' 
+          ? 'تم تسجيل الدخول بصلاحية المشرف والمطور (Admin)!' 
+          : 'Signed in with Developer & Admin privileges!', 
+        'success'
+      );
 
       if (typeof pendingAuthAction === 'function') {
         const action = pendingAuthAction;
@@ -1322,12 +1483,12 @@
 
       const user = usersList.find(u => u.email.toLowerCase() === email.toLowerCase());
       if (!user || user.password !== pass) {
-        showToast(currentLang === 'ar' ? 'البريد أو كلمة المرور غير صحيحة!' : 'Invalid email or password!', 'error');
+        showToast(currentLang === 'ar' ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة!' : 'Invalid email or password!', 'error');
         return;
       }
 
       if (user.isBanned) {
-        showToast(currentLang === 'ar' ? 'هذا الحساب محظور!' : 'This account is banned!', 'error');
+        showToast(currentLang === 'ar' ? 'هذا الحساب محظور من قِبل إدارة المنصة!' : 'This account has been banned by administrators!', 'error');
         return;
       }
 
@@ -1352,7 +1513,7 @@
       if (!name || !email || !pass) return;
 
       if (usersList.some(u => u.email.toLowerCase() === email.toLowerCase())) {
-        showToast(currentLang === 'ar' ? 'هذا البريد مسجل مسبقاً!' : 'Email already registered!', 'error');
+        showToast(currentLang === 'ar' ? 'هذا البريد مسجل بالفعل مسبقاً!' : 'Email already registered!', 'error');
         return;
       }
 
@@ -1373,7 +1534,7 @@
       setCurrentUser(newUser);
       closeAuthModal();
       document.getElementById('registerForm').reset();
-      showToast(currentLang === 'ar' ? 'تم إنشاء الحساب وتسجيل الدخول بنجاح!' : 'Account registered successfully!', 'success');
+      showToast(currentLang === 'ar' ? 'تم إنشاء الحساب بنجاح وتم تسجيل الدخول!' : 'Account registered and logged in successfully!', 'success');
 
       if (typeof pendingAuthAction === 'function') {
         const action = pendingAuthAction;
@@ -1384,9 +1545,10 @@
 
     function handleLogout() {
       setCurrentUser(null);
-      showToast(currentLang === 'ar' ? 'تم تسجيل الخروج.' : 'Logged out.', 'info');
+      showToast(currentLang === 'ar' ? 'تم تسجيل الخروج بنجاح.' : 'Logged out successfully.', 'info');
     }
 
+    // ---------- 2. VIDEOS STATE & MANAGEMENT ----------
     const DEFAULT_VIDEOS = [
       {
         id: 'vid-1',
@@ -1479,9 +1641,11 @@
       const dur = document.getElementById('newVidDuration').value.trim() || '15:00';
       const desc = document.getElementById('newVidDesc').value.trim();
 
+      const ytId = extractYouTubeId(ytRaw);
+
       const newVid = {
         id: 'vid-' + Date.now(),
-        youtubeId: extractYouTubeId(ytRaw),
+        youtubeId: ytId,
         title: title,
         category: cat,
         duration: dur,
@@ -1492,12 +1656,12 @@
       saveVideos();
       renderVideoGrid();
       document.getElementById('addVideoForm').reset();
-      showToast(currentLang === 'ar' ? 'تمت إضافة الفيديو الجديد بنجاح!' : 'Video published successfully!', 'success');
+      showToast(currentLang === 'ar' ? 'تمت إضافة الفيديو الجديد بنجاح!' : 'New video published successfully!', 'success');
     }
 
     function handleDeleteVideo(id) {
       if (!currentUser || currentUser.role !== 'admin') return;
-      if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا الفيديو؟' : 'Delete this video?')) return;
+      if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا الفيديو؟' : 'Are you sure you want to delete this video?')) return;
 
       siteVideos = siteVideos.filter(v => v.id !== id);
       saveVideos();
@@ -1523,9 +1687,10 @@
       `).join('');
     }
 
+    // ---------- 3. ADMIN MODAL & TAB CONTROL ----------
     function openAdminModal(tab = 'videos') {
       if (!currentUser || currentUser.role !== 'admin') {
-        showToast(currentLang === 'ar' ? 'غير مصرح لك بالوصول إلى لوحة الإدارة!' : 'Unauthorized access!', 'error');
+        showToast(currentLang === 'ar' ? 'غير مصرح لك بالوصول إلى لوحة الإدارة!' : 'Unauthorized access to admin panel!', 'error');
         return;
       }
       document.getElementById('adminModal').classList.remove('hidden');
@@ -1560,11 +1725,13 @@
       } else if (tab === 'content') {
         pContent.classList.remove('hidden');
         document.getElementById('adminTab-content').classList.add('border-cyan-400', 'text-cyan-400');
+        // Pre-fill current fact
         const f = DAILY_FACTS[currentFactIndex];
         document.getElementById('adminFactQuote').value = f.fact[currentLang] || f.fact.ar;
         document.getElementById('adminFactContext').value = f.context[currentLang] || f.context.ar;
         document.getElementById('adminFactSource').value = f.source;
       }
+
       safeRenderIcons();
     }
 
@@ -1612,12 +1779,13 @@
       saveUsers();
       renderAdminUsersTable();
 
+      // If banned target is current session, logout
       if (currentUser.id === userId && target.isBanned) {
         handleLogout();
       }
 
       showToast(target.isBanned 
-        ? (currentLang === 'ar' ? `تم حظر ${target.name}` : `${target.name} banned.`)
+        ? (currentLang === 'ar' ? `تم حظر ${target.name}` : `${target.name} has been banned.`)
         : (currentLang === 'ar' ? `تم رفع الحظر عن ${target.name}` : `Unbanned ${target.name}.`),
         'info'
       );
@@ -1638,10 +1806,11 @@
       };
 
       renderFact();
-      showToast(currentLang === 'ar' ? 'تم تحديث الحقيقة العلمية بنجاح!' : 'Fact updated successfully!', 'success');
+      showToast(currentLang === 'ar' ? 'تم تحديث الحقيقة العلمية بنجاح!' : 'Scientific fact updated!', 'success');
       closeAdminModal();
     }
 
+    // ---------- 4. FORUM DATA & INTERACTIONS ----------
     const DEFAULT_POSTS = [
       {
         id: 'post-bio-1',
@@ -1835,6 +2004,7 @@
       const filtered = forumPosts.filter(post => {
         const matchesCat = currentCategoryFilter === 'all' || post.category === currentCategoryFilter;
         if (!matchesCat) return false;
+
         if (!currentSearchTerm) return true;
 
         const titleText = (typeof post.title === 'object' ? (post.title[currentLang] || post.title.ar || '') : post.title).toLowerCase();
@@ -1900,8 +2070,12 @@
             </div>
 
             <div class="space-y-2">
-              <h3 class="text-base sm:text-lg font-bold text-white leading-snug">${postTitle}</h3>
-              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line">${postContent}</p>
+              <h3 class="text-base sm:text-lg font-bold text-white leading-snug">
+                ${postTitle}
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line">
+                ${postContent}
+              </p>
               ${tagsHtml ? `<div class="pt-1 flex flex-wrap gap-2">${tagsHtml}</div>` : ''}
             </div>
 
@@ -1948,6 +2122,7 @@
       return replies.map(r => {
         const author = typeof r.author === 'object' ? (r.author[currentLang] || r.author.ar) : r.author;
         const content = typeof r.content === 'object' ? (r.content[currentLang] || r.content.ar) : r.content;
+
         return `
           <div class="bg-slate-900/70 p-3 rounded-xl border border-slate-800 text-xs space-y-1">
             <div class="flex items-center justify-between text-slate-400">
@@ -2012,10 +2187,12 @@
 
     function handleCreatePost(e) {
       e.preventDefault();
+
       if (!currentUser) {
         openAuthModal('social', 'post');
         return;
       }
+
       if (currentUser.isBanned) {
         showToast(currentLang === 'ar' ? 'حسابك محظور من النشر!' : 'Your account is banned!', 'error');
         return;
@@ -2052,17 +2229,18 @@
       currentCategoryFilter = category;
       renderForumCategoryCounts();
       setCategoryFilter(category);
-      showToast(currentLang === 'ar' ? 'تم نشر موضوعك بنجاح في ساحة النقاش!' : 'Post published!', 'success');
+      showToast(currentLang === 'ar' ? 'تم نشر موضوعك بنجاح في ساحة النقاش!' : 'Post published to the community forum!', 'success');
     }
 
     function submitReply(postId) {
       if (!currentUser) {
-        showToast(currentLang === 'ar' ? 'يرجى تسجيل الدخول للرد على المنشور!' : 'Please log in!', 'info');
+        showToast(currentLang === 'ar' ? 'يرجى تسجيل الدخول للرد على المنشور!' : 'Please log in to reply!', 'info');
         openAuthModal('login');
         return;
       }
+
       if (currentUser.isBanned) {
-        showToast(currentLang === 'ar' ? 'حسابك محظور من المشاركة!' : 'Your account is banned!', 'error');
+        showToast(currentLang === 'ar' ? 'حسابك محظور من المشاركة!' : 'Your account is banned from commenting!', 'error');
         return;
       }
 
@@ -2092,18 +2270,20 @@
 
     function handleDeletePost(postId) {
       if (!currentUser || currentUser.role !== 'admin') {
-        showToast(currentLang === 'ar' ? 'صلاحية الحذف مقتصرة على المشرف فقط!' : 'Admin only!', 'error');
+        showToast(currentLang === 'ar' ? 'صلاحية الحذف مقتصرة على المشرف فقط!' : 'Only administrators can delete posts!', 'error');
         return;
       }
-      if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا المنشور نهائياً من الساحة؟' : 'Confirm deletion?')) return;
+
+      if (!confirm(currentLang === 'ar' ? 'هل أنت متأكد من حذف هذا المنشور نهائياً من الساحة؟' : 'Confirm permanent deletion of this post?')) return;
 
       forumPosts = forumPosts.filter(p => p.id !== postId);
       savePosts();
       renderForumCategoryCounts();
       renderForumPosts();
-      showToast(currentLang === 'ar' ? 'تم حذف المنشور من الساحة بنجاح.' : 'Post deleted.', 'info');
+      showToast(currentLang === 'ar' ? 'تم حذف المنشور من الساحة بنجاح.' : 'Post deleted by administrator.', 'info');
     }
 
+    // ---------- 5. DAILY FACTS HANDLER ----------
     const DAILY_FACTS = [
       {
         fact: {
@@ -2173,18 +2353,17 @@
       try {
         await navigator.clipboard.writeText(text);
         const icon = document.getElementById('factCopyIcon');
-        if (icon) {
-          icon.setAttribute('data-lucide', 'check');
+        icon.setAttribute('data-lucide', 'check');
+        safeRenderIcons();
+        showToast(currentLang === 'ar' ? 'تم نسخ الحقيقة إلى الحافظة' : 'Copied to clipboard', 'success');
+        setTimeout(() => {
+          icon.setAttribute('data-lucide', 'copy');
           safeRenderIcons();
-          showToast(currentLang === 'ar' ? 'تم نسخ الحقيقة إلى الحافظة' : 'Copied to clipboard', 'success');
-          setTimeout(() => {
-            icon.setAttribute('data-lucide', 'copy');
-            safeRenderIcons();
-          }, 2000);
-        }
+        }, 2000);
       } catch (err) {}
     }
 
+    // ---------- 6. INTERACTIVE QUIZ DATA & HANDLERS ----------
     const QUIZ_QUESTIONS = [
       {
         category: { ar: 'العلوم البيولوجية', en: 'Biological Sciences' },
@@ -2429,6 +2608,7 @@
       renderQuiz();
     }
 
+    // ---------- 7. GENERAL TRANSLATIONS & LIFECYCLE ----------
     function applyTranslations() {
       const isRtl = currentLang === 'ar';
       document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
@@ -2471,8 +2651,13 @@
       document.getElementById('mobileMenu').classList.add('hidden');
     }
 
+    // Initialize on DOM load and Window load
     document.addEventListener('DOMContentLoaded', () => {
       applyTranslations();
+      safeRenderIcons();
+    });
+
+    window.addEventListener('load', () => {
       safeRenderIcons();
     });
   </script>
